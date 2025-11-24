@@ -1,25 +1,58 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
-
 :root {
   --foreground-rgb: 255, 255, 255;
-  --background-start-rgb: 0, 0, 0;
-  --background-end-rgb: 0, 0, 0;
+  --background-start-rgb: 20, 20, 20;
+  --background-end-rgb: 35, 35, 35;
 }
 
 body {
-  color: rgb(var(--foreground-rgb));
-  background: linear-gradient(
-      to bottom,
-      transparent,
-      rgb(var(--background-end-rgb))
-    )
-    rgb(var(--background-start-rgb));
+  /* Fallback for older browsers that don't support gradients */
+  background-color: rgb(var(--background-start-rgb));
+  color: white;
+
+  /* Vendor-prefixed versions */
+  background-image: -webkit-linear-gradient(
+    top,
+    rgb(var(--background-start-rgb)),
+    rgb(var(--background-end-rgb))
+  ); /* Chrome, Safari, newer Opera, Edge (WebKit/Blink) */
+  background-image: -moz-linear-gradient(
+    top,
+    rgb(var(--background-start-rgb)),
+    rgb(var(--background-end-rgb))
+  ); /* Firefox */
+  background-image: -o-linear-gradient(
+    top,
+    rgb(var(--background-start-rgb)),
+    rgb(var(--background-end-rgb))
+  ); /* Older Opera */
+  background-image: -ms-linear-gradient(
+    top,
+    rgb(var(--background-start-rgb)),
+    rgb(var(--background-end-rgb))
+  ); /* Internet Explorer 10+ */
+
+  /* Standard W3C version (must be last) */
+  background-image: linear-gradient(
+    to bottom,
+    rgb(var(--background-start-rgb)),
+    rgb(var(--background-end-rgb))
+  );
 }
 
 @layer utilities {
   .text-balance {
     text-wrap: balance;
+  }
+}
+
+@keyframes moveBackground {
+  from {
+    background-position: 0% 0%;
+  }
+  to {
+    background-position: 0% -1000%;
   }
 }
