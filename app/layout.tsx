@@ -1,9 +1,10 @@
 import type { Metadata } from "next";
 import { Outfit } from "next/font/google";
 import "./globals.css";
-import SmoothScroll from "@/components/SmoothScroll";
+import SmoothScroll from "@/components/animations/SmoothScroll";
+import { ThemeProvider } from "@/components/providers/theme-provider";
 
-const outfit = Outfit({ subsets: ["latin"] });
+const outfit = Outfit({ subsets: ["latin"], variable: "--font-outfit" });
 
 export const metadata: Metadata = {
   title: "Mubbashir | Creative Developer",
@@ -16,9 +17,13 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" className="dark">
-      <body className={`${outfit.className} bg-black text-white antialiased selection:bg-white selection:text-black`}>
-        <SmoothScroll>{children}</SmoothScroll>
+    <html lang="en" suppressHydrationWarning>
+      <body
+        className={`${outfit.variable} bg-black text-white antialiased selection:bg-white selection:text-black`}
+      >
+        <ThemeProvider attribute="class" enableSystem disableTransitionOnChange>
+          <SmoothScroll>{children}</SmoothScroll>
+        </ThemeProvider>
       </body>
     </html>
   );
