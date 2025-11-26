@@ -3,7 +3,7 @@ import { ArrowUpRight } from "lucide-react";
 import { SideTab } from "@/components/ui/side-tab";
 import { getColorStyle } from "@/lib/color-utils";
 
-export interface HeroSectionProps {
+export interface HeroLeftSectionProps {
   /** Name to display in the heading */
   name?: string;
   /** Description/bio text */
@@ -29,7 +29,7 @@ export interface HeroSectionProps {
  *
  * @example
  * ```tsx
- * <HeroSection
+ * <HeroLeftSection
  *   name="John Doe"
  *   description="I'm a developer..."
  *   ctaText="Hire me"
@@ -38,7 +38,7 @@ export interface HeroSectionProps {
  * />
  * ```
  */
-export const HeroSection = ({
+export const HeroLeftSection = ({
   name = "Mubbashir",
   description = "I'm a digital designer and developer crafting nurturing digital environments. Like a peaceful sanctuary in the city, I build interfaces that are both invigorating and accessible, suitable for all users.",
   ctaText = "Get in touch",
@@ -47,7 +47,7 @@ export const HeroSection = ({
   openToWorkText = "Open to work",
   accentColor = "primary",
   className = "",
-}: HeroSectionProps) => {
+}: HeroLeftSectionProps) => {
   const accentStyle = getColorStyle(accentColor, "text");
   const bgStyle = getColorStyle(accentColor, "bg");
 
