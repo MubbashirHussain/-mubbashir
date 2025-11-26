@@ -6,15 +6,19 @@ import { Header, NavLink } from "@/components/layout/header";
 import { HeroSection } from "@/components/sections/hero-section";
 import { ProfileImage, FloatingIcon } from "@/components/ui/profile-image";
 import { ImageGallery } from "@/components/ui/image-gallery";
-import { Github, Linkedin, Zap } from "lucide-react";
+import { Battery, Github, Linkedin, Zap } from "lucide-react";
 import { useRef } from "react";
 import { tailwindToHex } from "@/lib/color-utils";
 import { useElementUnits } from "@/hooks/use-element-units";
+import BatteryIcon from "@/components/ui/batteryIcon";
+import Image from "next/image";
+import Charge from "@/components/ui/svg/charge";
 
 export default function Home() {
   const parentRef = useRef<HTMLDivElement>(null);
   const containerRef = useRef<HTMLDivElement>(null);
-  const toPx = useElementUnits(containerRef);
+  const toPxContainer = useElementUnits(containerRef);
+  
 
   // Navigation links configuration
   const navLinks: NavLink[] = [
@@ -100,12 +104,32 @@ export default function Home() {
           {/* Spacer */}
           <div className="col-span-1"></div>
           {/* Right Column - Profile Image */}
-          <div className="col-span-4">
+          <div className="col-span-4 flex flex-col ">
+            <div className="bg-secondary flex justify-between items-center p-2 px-3 w-[80%] my-3 rounded-full h-[60px]  self-baseline-last">
+              <BatteryIcon
+                className="ms-2"
+                batteryPercentage={82}
+                bgColor=""
+                tipColor="bg-white"
+                strokeColor="border-white"
+                fillColor="bg-white"
+                textColor="text-white"
+              />
+              <div className="group flex h-10 items-center border border-white rounded-full p-2 transition-all duration-300 hover:bg-white hover:text-secondary text-white cursor-pointer hover:pr-4">
+                <div className="w-6 h-6 flex items-center justify-center">
+                  <Charge className="w-5 h-5" />
+                </div>
+                <span className="max-w-0 overflow-hidden opacity-0 group-hover:max-w-xs group-hover:opacity-100 group-hover:ml-2 transition-all duration-300 ease-in-out whitespace-nowrap text-sm font-medium">
+                  Plug In
+                </span>
+              </div>
+            </div>
+
             {/* Background Shape */}
             <div
               className={`h-[80%] w-[43%] right-0 bg-primary absolute top-[10%]`}
               style={{
-                borderRadius: toPx("5%"),
+                borderRadius: toPxContainer("5%"),
               }}
             />
 
