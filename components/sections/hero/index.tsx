@@ -35,10 +35,22 @@ export default function HeroSection() {
   const rightSideTab2Ref = useRef<HTMLDivElement>(null);
   const profileRef = useRef<HTMLDivElement>(null);
 
-  const [isCharging, setIsCharging] = useState<boolean>(false);
+  const [isCharging, setIsCharging] = useState<{
+    isCharging: boolean;
+    ChargingPercentage: number;
+  }>({
+    isCharging: false,
+    ChargingPercentage: 0,
+  });
   const onClickChargeHandle = () => {
-    // setIsCharging(!isCharging);
-    setIsCharging(true);
+    if (!isCharging) {
+      const audio = new Audio("/chargeSound.mp3");
+      audio.play();
+    }
+    setIsCharging((prev) => ({
+      isCharging: !prev.isCharging,
+      ChargingPercentage: prev.isCharging ? 62 : 100,
+    }));
   };
 
   useLayoutEffect(() => {
@@ -224,8 +236,8 @@ export default function HeroSection() {
             >
               <BatteryIcon
                 className="ms-2"
-                showCharging={isCharging}
-                batteryPercentage={82}
+                showCharging={isCharging.isCharging}
+                batteryPercentage={isCharging.ChargingPercentage}
                 bgColor=""
                 tipColor="bg-white"
                 strokeColor="border-white"
@@ -240,7 +252,7 @@ export default function HeroSection() {
                   <Charge className="w-5 h-5" />
                 </div>
                 <span className="max-w-0 overflow-hidden opacity-0 group-hover:max-w-xs group-hover:opacity-100 group-hover:ml-2 transition-all duration-300 ease-in-out whitespace-nowrap text-sm font-medium">
-                  Plug In
+                  {isCharging ? "Unplug" : "Plug In"}
                 </span>
               </div>
             </div>

@@ -4,6 +4,7 @@ import { cn } from "@/lib/utils";
 import Charge from "./svg/charge";
 import gsap from "gsap";
 import { scale } from "framer-motion";
+import { SlidingNumber } from "./sliding-number";
 
 interface BatteryIconProps {
   batteryPercentage: number;
@@ -28,9 +29,13 @@ function AnimatedCharge() {
   return (
     <div
       ref={divRef}
-      className="absolute h-[calc(100%+6px)] w-full top-[50%] left-[50%] -translate-x-1/2 -translate-y-1/2"
+      className="absolute h-[calc(100%+2)] w-full top-[45%] left-[60%] -translate-x-1/2 -translate-y-1/2"
     >
-      <Charge className="z-10 fill-green-500" />
+      <Charge
+        filled={true}
+        className="z-10 fill-black stroke-white"
+        size={15}
+      />
     </div>
   );
 }
@@ -53,7 +58,9 @@ export default function BatteryIcon({
   return (
     <div className={cn("flex items-center gap-2", className)}>
       {!showInSide && (
-        <span className={cn(textColor)}>{batteryPercentage}%</span>
+        <span className={cn("flex items-center", textColor)}>
+          <SlidingNumber value={batteryPercentage} />%
+        </span>
       )}
       <div className="flex items-center">
         <div
@@ -83,7 +90,7 @@ export default function BatteryIcon({
                 textColor
               )}
             >
-              {batteryPercentage}%
+              <SlidingNumber value={batteryPercentage} />%
             </div>
           )}
         </div>

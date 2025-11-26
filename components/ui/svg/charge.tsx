@@ -3,24 +3,42 @@ import { cn } from "@/lib/utils";
 export default function Charge({
   className,
   size = 24,
+  filled = false,
 }: {
   className?: string;
   size?: number;
+  filled?: boolean;
 }) {
   return (
-    <svg
-      xmlns="http://www.w3.org/2000/svg"
-      fill="currentColor"
-      className={cn("", className)}
-      viewBox="0 0 16 16"
-      height={size}
-      width={size}
-    >
-      <desc>Lightning Charge Streamline Icon: https://streamlinehq.com</desc>
-      <path
-        d="M11.251 0.068a0.5 0.5 0 0 1 0.227 0.58L9.677 6.5H13a0.5 0.5 0 0 1 0.364 0.843l-8 8.5a0.5 0.5 0 0 1 -0.842 -0.49L6.323 9.5H3a0.5 0.5 0 0 1 -0.364 -0.843l8 -8.5a0.5 0.5 0 0 1 0.615 -0.09zM4.157 8.5H7a0.5 0.5 0 0 1 0.478 0.647L6.11 13.59l5.732 -6.09H9a0.5 0.5 0 0 1 -0.478 -0.647L9.89 2.41z"
-        strokeWidth="1"
-      ></path>
-    </svg>
+    <>
+      {!filled ? (
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          fill="currentColor"
+          className={cn("", className)}
+          viewBox="0 0 16 16"
+          height={size}
+          width={size}
+        >
+          <path
+            d="M11.251 0.068a0.5 0.5 0 0 1 0.227 0.58L9.677 6.5H13a0.5 0.5 0 0 1 0.364 0.843l-8 8.5a0.5 0.5 0 0 1 -0.842 -0.49L6.323 9.5H3a0.5 0.5 0 0 1 -0.364 -0.843l8 -8.5a0.5 0.5 0 0 1 0.615 -0.09zM4.157 8.5H7a0.5 0.5 0 0 1 0.478 0.647L6.11 13.59l5.732 -6.09H9a0.5 0.5 0 0 1 -0.478 -0.647L9.89 2.41z"
+            strokeWidth="1"
+          ></path>
+        </svg>
+      ) : (
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          className={cn("fill-current stroke-current", className)}
+          viewBox="0 0 16 16"
+          height={size}
+          width={size}
+        >
+          <path
+            d="M11.251 0.068a0.5 0.5 0 0 1 0.227 0.58L9.677 6.5H13a0.5 0.5 0 0 1 0.364 0.843l-8 8.5a0.5 0.5 0 0 1 -0.842 -0.49L6.323 9.5H3a0.5 0.5 0 0 1 -0.364 -0.843l8 -8.5a0.5 0.5 0 0 1 0.615 -0.09z"
+            strokeWidth="1"
+          ></path>
+        </svg>
+      )}
+    </>
   );
 }
