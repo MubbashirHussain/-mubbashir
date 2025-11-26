@@ -1,7 +1,8 @@
-import React from "react";
+import React, { useEffect, useRef } from "react";
 import { ArrowUpRight } from "lucide-react";
 import { SideTab } from "@/components/ui/side-tab";
 import { getColorStyle } from "@/lib/color-utils";
+import gsap from "gsap";
 
 export interface HeroLeftSectionProps {
   /** Name to display in the heading */
@@ -51,11 +52,32 @@ export const HeroLeftSection = ({
   const accentStyle = getColorStyle(accentColor, "text");
   const bgStyle = getColorStyle(accentColor, "bg");
 
+  const blobRef = useRef<HTMLDivElement>(null);
+  const blobRef1 = useRef<HTMLDivElement>(null);
+  const TextSectionRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    if (blobRef.current) {
+      gsap.from([blobRef.current, blobRef1.current], {
+        y: -300,
+        duration: 1.5,
+        ease: "power3.out",
+      });
+      gsap.from(TextSectionRef.current, {
+        opacity: 0,
+        y: 20,
+        duration: 1,
+        ease: "power3.out",
+      });
+    }
+  }, []);
+
   return (
     <div className={`flex flex-col justify-start md:pr-12 ${className}`}>
       {/* Decorative Side Tabs */}
       <div className="">
         <SideTab
+          ref={blobRef}
           top="13.5%"
           left="0%"
           right="0%"
@@ -80,6 +102,7 @@ export const HeroLeftSection = ({
           width="18%"
         />
         <SideTab
+          ref={blobRef1}
           top="18.5%"
           left="15%"
           right="0%"
@@ -110,61 +133,62 @@ export const HeroLeftSection = ({
           width="16%"
         />
       </div>
+      <div className="" ref={TextSectionRef}>
+        {/* "Open to Work" Badge */}
+        {showOpenToWork && (
+          <div className="inline-flex items-center gap-3 border border-primary-200 bg-primary-50 px-5 py-2 rounded-full w-fit mb-8 shadow-sm hover:shadow-md transition-shadow cursor-default">
+            <span className="relative flex h-3 w-3">
+              <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-green-400 opacity-75"></span>
+              <span className="relative inline-flex rounded-full h-3 w-3 bg-green-500"></span>
+            </span>
+            <span className="text-sm font-semibold text-secondary-800 tracking-wide">
+              {openToWorkText}
+            </span>
+          </div>
+        )}
 
-      {/* "Open to Work" Badge */}
-      {showOpenToWork && (
-        <div className="inline-flex items-center gap-3 border border-primary-200 bg-primary-50 px-5 py-2 rounded-full w-fit mb-8 shadow-sm hover:shadow-md transition-shadow cursor-default">
-          <span className="relative flex h-3 w-3">
-            <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-green-400 opacity-75"></span>
-            <span className="relative inline-flex rounded-full h-3 w-3 bg-green-500"></span>
+        {/* Heading */}
+        <h1 className="text-5xl md:text-7xl font-black leading-[1.1] mb-6 tracking-tight text-text">
+          Hey, I am{" "}
+          <span className="relative">
+            {name}
+            {/* Underline decoration */}
+            <svg
+              className={`absolute w-full h-3 left-0 ${
+                accentStyle.className || ""
+              }`}
+              viewBox="0 0 200 010"
+              fill="none"
+              xmlns="http://www.w3.org/2000/svg"
+              style={accentStyle.style}
+            >
+              <path
+                d="M2.00025 6.99997C25.7501 2.49994 132.5 -1.49999 198 3.99998"
+                stroke="currentColor"
+                strokeWidth="3"
+                strokeLinecap="round"
+              />
+            </svg>
           </span>
-          <span className="text-sm font-semibold text-secondary-800 tracking-wide">
-            {openToWorkText}
-          </span>
-        </div>
-      )}
+        </h1>
 
-      {/* Heading */}
-      <h1 className="text-5xl md:text-7xl font-black leading-[1.1] mb-6 tracking-tight text-text">
-        Hey, I am{" "}
-        <span className="relative">
-          {name}
-          {/* Underline decoration */}
-          <svg
-            className={`absolute w-full h-3 left-0 ${
-              accentStyle.className || ""
-            }`}
-            viewBox="0 0 200 010"
-            fill="none"
-            xmlns="http://www.w3.org/2000/svg"
-            style={accentStyle.style}
-          >
-            <path
-              d="M2.00025 6.99997C25.7501 2.49994 132.5 -1.49999 198 3.99998"
-              stroke="currentColor"
-              strokeWidth="3"
-              strokeLinecap="round"
-            />
-          </svg>
-        </span>
-      </h1>
+        {/* Description */}
+        <p className="text-text-secondary text-lg leading-relaxed mb-10 max-w-lg">
+          {description}
+        </p>
 
-      {/* Description */}
-      <p className="text-text-secondary text-lg leading-relaxed mb-10 max-w-lg">
-        {description}
-      </p>
-
-      {/* CTA Button */}
-      <button
-        onClick={onCtaClick}
-        className={`text-secondary font-bold text-lg px-8 py-4 rounded-full w-fit transition-all duration-300 shadow-lg hover:shadow-xl flex items-center gap-3 group mb-16 md:mb-24 hover:bg-secondary hover:text-primary ${
-          bgStyle.className || ""
-        }`}
-        style={bgStyle.style}
-      >
-        <span>{ctaText}</span>
-        <ArrowUpRight className="group-hover:rotate-45 transition-transform duration-300" />
-      </button>
+        {/* CTA Button */}
+        <button
+          onClick={onCtaClick}
+          className={`text-secondary font-bold text-lg px-8 py-4 rounded-full w-fit transition-all duration-300 shadow-sm  hover:shadow-md hover:scale-105 flex items-center gap-3 group mb-16 md:mb-24 hover:bg-secondary hover:text-primary ${
+            bgStyle.className || ""
+          }`}
+          style={bgStyle.style}
+        >
+          <span>{ctaText}</span>
+          <ArrowUpRight className="group-hover:rotate-45 transition-transform duration-300" />
+        </button>
+      </div>
     </div>
   );
 };

@@ -100,173 +100,181 @@ interface SideTabProps {
  * />
  * ```
  */
-export const SideTab = ({
-  width = "100px",
-  height = "90px",
-  top,
-  left,
-  right,
-  bottom,
-  bgClassName,
-  color,
-  radius = "9999px",
-  eachRadius,
-  cornerSize = "40px",
-  eachCorner = {},
-  className = "",
-  side = "left",
-  children,
-}: SideTabProps) => {
-  const isVertical = side === "left" || side === "right";
-  const bgStyle = color ? getColorStyle(color, "bg") : {};
-  const bgColor = tailwindToHex(bgClassName || "");
+export const SideTab = React.forwardRef<HTMLDivElement, SideTabProps>(
+  (
+    {
+      width = "100px",
+      height = "90px",
+      top,
+      left,
+      right,
+      bottom,
+      bgClassName,
+      color,
+      radius = "9999px",
+      eachRadius,
+      cornerSize = "40px",
+      eachCorner = {},
+      className = "",
+      side = "left",
+      children,
+    },
+    ref
+  ) => {
+    const isVertical = side === "left" || side === "right";
+    const bgStyle = color ? getColorStyle(color, "bg") : {};
+    const bgColor = tailwindToHex(bgClassName || "");
 
-  // Determine the main tab's border radius based on side
-  let borderRadiusStyle: React.CSSProperties = {};
+    // Determine the main tab's border radius based on side
+    let borderRadiusStyle: React.CSSProperties = {};
 
-  if (eachRadius) {
-    // Use individual radius values if provided
-    borderRadiusStyle = {
-      borderTopLeftRadius: eachRadius.tl || "0",
-      borderTopRightRadius: eachRadius.tr || "0",
-      borderBottomLeftRadius: eachRadius.bl || "0",
-      borderBottomRightRadius: eachRadius.br || "0",
-    };
-  } else {
-    // Use single radius value based on side
-    if (side === "left") {
+    if (eachRadius) {
+      // Use individual radius values if provided
       borderRadiusStyle = {
-        borderTopRightRadius: radius,
-        borderBottomRightRadius: radius,
+        borderTopLeftRadius: eachRadius.tl || "0",
+        borderTopRightRadius: eachRadius.tr || "0",
+        borderBottomLeftRadius: eachRadius.bl || "0",
+        borderBottomRightRadius: eachRadius.br || "0",
       };
-    } else if (side === "right") {
-      borderRadiusStyle = {
-        borderTopLeftRadius: radius,
-        borderBottomLeftRadius: radius,
-      };
-    } else if (side === "top") {
-      borderRadiusStyle = {
-        borderBottomLeftRadius: radius,
-        borderBottomRightRadius: radius,
-      };
-    } else if (side === "bottom") {
-      borderRadiusStyle = {
-        borderTopLeftRadius: radius,
-        borderTopRightRadius: radius,
-      };
+    } else {
+      // Use single radius value based on side
+      if (side === "left") {
+        borderRadiusStyle = {
+          borderTopRightRadius: radius,
+          borderBottomRightRadius: radius,
+        };
+      } else if (side === "right") {
+        borderRadiusStyle = {
+          borderTopLeftRadius: radius,
+          borderBottomLeftRadius: radius,
+        };
+      } else if (side === "top") {
+        borderRadiusStyle = {
+          borderBottomLeftRadius: radius,
+          borderBottomRightRadius: radius,
+        };
+      } else if (side === "bottom") {
+        borderRadiusStyle = {
+          borderTopLeftRadius: radius,
+          borderTopRightRadius: radius,
+        };
+      }
     }
+
+    // Determine styles for the main tab
+    let mainTabStyles: React.CSSProperties = {
+      width: width,
+      height: height,
+      top,
+      left,
+      right,
+      bottom,
+      ...bgStyle.style,
+      ...borderRadiusStyle,
+    };
+
+    // Define default corner configuration
+    const defaultCornerConfig: CornerConfig = {
+      enabled: true,
+      size: cornerSize,
+      fillColor: "transparent",
+      backgroundColor: color,
+    };
+
+    // Map position keys to array indices based on side
+    // For left side: bl (1), tl (2), br (3), tr (4)
+    let cornerKeyMap: (keyof EachCornerConfig)[] = [];
+
+    if (side === "left") {
+      cornerKeyMap = ["bl", "tl", "br", "tr"];
+    } else if (side === "right") {
+      cornerKeyMap = ["br", "tr", "bl", "tl"];
+    } else if (side === "top") {
+      cornerKeyMap = ["tr", "tl", "br", "bl"];
+    } else if (side === "bottom") {
+      cornerKeyMap = ["br", "bl", "tr", "tl"];
+    }
+
+    // Merge user config with defaults for each corner
+    const mergedCorners = cornerKeyMap.map((key) => ({
+      ...defaultCornerConfig,
+      ...(eachCorner[key] || {}),
+    }));
+
+    // Define corner positions based on side
+    type CornerPosition =
+      | "top-left"
+      | "top-right"
+      | "bottom-left"
+      | "bottom-right";
+
+    interface CornerLayout {
+      className: string;
+      position: CornerPosition;
+    }
+
+    let cornerLayouts: CornerLayout[] = [];
+
+    if (side === "left") {
+      cornerLayouts = [
+        { className: "absolute bottom-full left-0", position: "bottom-left" },
+        { className: "absolute top-full left-0", position: "top-left" },
+        { className: "absolute bottom-full right-0", position: "bottom-right" },
+        { className: "absolute top-full right-0", position: "top-right" },
+      ];
+    } else if (side === "right") {
+      cornerLayouts = [
+        { className: "absolute bottom-full right-0", position: "bottom-right" },
+        { className: "absolute top-full right-0", position: "top-right" },
+        { className: "absolute bottom-full left-0", position: "bottom-left" },
+        { className: "absolute top-full left-0", position: "top-left" },
+      ];
+    } else if (side === "top") {
+      cornerLayouts = [
+        { className: "absolute right-full top-0", position: "top-right" },
+        { className: "absolute left-full top-0", position: "top-left" },
+        { className: "absolute right-full bottom-0", position: "bottom-right" },
+        { className: "absolute left-full bottom-0", position: "bottom-left" },
+      ];
+    } else if (side === "bottom") {
+      cornerLayouts = [
+        { className: "absolute right-full bottom-0", position: "bottom-right" },
+        { className: "absolute left-full bottom-0", position: "bottom-left" },
+        { className: "absolute right-full top-0", position: "top-right" },
+        { className: "absolute left-full top-0", position: "top-left" },
+      ];
+    }
+
+    return (
+      <div
+        ref={ref}
+        className={`absolute ${
+          bgClassName || bgStyle.className || ""
+        } ${className}`}
+        style={mainTabStyles}
+      >
+        {mergedCorners.map((corner, index) =>
+          corner.enabled ? (
+            <InvertedCorner
+              viewBox={corner.viewBox}
+              key={index}
+              className={`${cornerLayouts[index].className} ${
+                corner.className || ""
+              }`}
+              style={{ width: corner.size, height: corner.size }}
+              position={cornerLayouts[index].position}
+              fillColor={corner.fillColor}
+              backgroundColor={
+                corner.backgroundColor ||
+                tailwindToHex(bgStyle.className || bgColor)
+              }
+            />
+          ) : null
+        )}
+        {children}
+      </div>
+    );
   }
+);
 
-  // Determine styles for the main tab
-  let mainTabStyles: React.CSSProperties = {
-    width: width,
-    height: height,
-    top,
-    left,
-    right,
-    bottom,
-    ...bgStyle.style,
-    ...borderRadiusStyle,
-  };
-
-  // Define default corner configuration
-  const defaultCornerConfig: CornerConfig = {
-    enabled: true,
-    size: cornerSize,
-    fillColor: "transparent",
-    backgroundColor: color,
-  };
-
-  // Map position keys to array indices based on side
-  // For left side: bl (1), tl (2), br (3), tr (4)
-  let cornerKeyMap: (keyof EachCornerConfig)[] = [];
-
-  if (side === "left") {
-    cornerKeyMap = ["bl", "tl", "br", "tr"];
-  } else if (side === "right") {
-    cornerKeyMap = ["br", "tr", "bl", "tl"];
-  } else if (side === "top") {
-    cornerKeyMap = ["tr", "tl", "br", "bl"];
-  } else if (side === "bottom") {
-    cornerKeyMap = ["br", "bl", "tr", "tl"];
-  }
-
-  // Merge user config with defaults for each corner
-  const mergedCorners = cornerKeyMap.map((key) => ({
-    ...defaultCornerConfig,
-    ...(eachCorner[key] || {}),
-  }));
-
-  // Define corner positions based on side
-  type CornerPosition =
-    | "top-left"
-    | "top-right"
-    | "bottom-left"
-    | "bottom-right";
-
-  interface CornerLayout {
-    className: string;
-    position: CornerPosition;
-  }
-
-  let cornerLayouts: CornerLayout[] = [];
-
-  if (side === "left") {
-    cornerLayouts = [
-      { className: "absolute bottom-full left-0", position: "bottom-left" },
-      { className: "absolute top-full left-0", position: "top-left" },
-      { className: "absolute bottom-full right-0", position: "bottom-right" },
-      { className: "absolute top-full right-0", position: "top-right" },
-    ];
-  } else if (side === "right") {
-    cornerLayouts = [
-      { className: "absolute bottom-full right-0", position: "bottom-right" },
-      { className: "absolute top-full right-0", position: "top-right" },
-      { className: "absolute bottom-full left-0", position: "bottom-left" },
-      { className: "absolute top-full left-0", position: "top-left" },
-    ];
-  } else if (side === "top") {
-    cornerLayouts = [
-      { className: "absolute right-full top-0", position: "top-right" },
-      { className: "absolute left-full top-0", position: "top-left" },
-      { className: "absolute right-full bottom-0", position: "bottom-right" },
-      { className: "absolute left-full bottom-0", position: "bottom-left" },
-    ];
-  } else if (side === "bottom") {
-    cornerLayouts = [
-      { className: "absolute right-full bottom-0", position: "bottom-right" },
-      { className: "absolute left-full bottom-0", position: "bottom-left" },
-      { className: "absolute right-full top-0", position: "top-right" },
-      { className: "absolute left-full top-0", position: "top-left" },
-    ];
-  }
-
-  return (
-    <div
-      className={`absolute ${
-        bgClassName || bgStyle.className || ""
-      } ${className}`}
-      style={mainTabStyles}
-    >
-      {mergedCorners.map((corner, index) =>
-        corner.enabled ? (
-          <InvertedCorner
-            viewBox={corner.viewBox}
-            key={index}
-            className={`${cornerLayouts[index].className} ${
-              corner.className || ""
-            }`}
-            style={{ width: corner.size, height: corner.size }}
-            position={cornerLayouts[index].position}
-            fillColor={corner.fillColor}
-            backgroundColor={
-              corner.backgroundColor ||
-              tailwindToHex(bgStyle.className || bgColor)
-            }
-          />
-        ) : null
-      )}
-      {children}
-    </div>
-  );
-};
+SideTab.displayName = "SideTab";

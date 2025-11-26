@@ -75,69 +75,77 @@ export interface HeaderProps {
  * />
  * ```
  */
-export const Header = ({
-  links = [
-    { label: "Home", href: "#", rel: "noopener noreferrer" },
-    { label: "Services", href: "#", rel: "noopener noreferrer" },
-    { label: "Portfolio", href: "#", rel: "noopener noreferrer" },
-    { label: "Blog", href: "#", rel: "noopener noreferrer" },
-    { label: "Contact", href: "#", rel: "noopener noreferrer" },
-  ],
-  bgClassName,
-  backgroundColor,
-  textClassName,
-  textColor,
-  width = "30%",
-  height = "7%",
-  radius = "40px",
-  cornerSize = 40,
-  className = "",
-  navGap = "gap-8",
-}: HeaderProps) => {
-  const textColorStyle = textColor ? getColorStyle(textColor, "text") : {};
-  const bgStyle = backgroundColor
-    ? getColorStyle(backgroundColor, "bg-secondary")
-    : {};
+export const Header = React.forwardRef(
+  (
+    {
+      links = [
+        { label: "Home", href: "#", rel: "noopener noreferrer" },
+        { label: "Services", href: "#", rel: "noopener noreferrer" },
+        { label: "Portfolio", href: "#", rel: "noopener noreferrer" },
+        { label: "Blog", href: "#", rel: "noopener noreferrer" },
+        { label: "Contact", href: "#", rel: "noopener noreferrer" },
+      ],
+      bgClassName,
+      backgroundColor,
+      textClassName,
+      textColor,
+      width = "30%",
+      height = "7%",
+      radius = "40px",
+      cornerSize = 40,
+      className = "",
+      navGap = "gap-8",
+    }: HeaderProps,
+    ref
+  ) => {
+    const textColorStyle = textColor ? getColorStyle(textColor, "text") : {};
+    const bgStyle = backgroundColor
+      ? getColorStyle(backgroundColor, "bg-secondary")
+      : {};
 
-  return (
-    <SideTab
-      top="0"
-      left="50%"
-      className={`-left-[50%] -translate-x-1/2 flex items-center justify-center fixed top-0 z-50 ${className}`}
-      color={backgroundColor}
-      bgClassName={bgClassName}
-      eachCorner={{
-        br: { enabled: false },
-        tr: { enabled: true, backgroundColor: "bg-secondary" },
-        bl: { enabled: false },
-        tl: { enabled: true, backgroundColor: "bg-secondary" },
-      }}
-      radius={radius}
-      side="top"
-      height={height}
-      width={width}
-      cornerSize={cornerSize}
-    >
-      <nav className="flex flex-col gap-2">
-        <ul className={`flex ${navGap}`}>
-          {links.map((link, index) => (
-            <li
-              key={index}
-              className={textClassName || textColorStyle.className || ""}
-              style={textColorStyle.style}
-            >
-              <a
-                href={link.href}
-                target={link.target}
-                rel={link.rel}
-                className="hover:opacity-80 transition-opacity"
+    return (
+      <SideTab
+        ref={ref as any}
+        top="0"
+        left="50%"
+        className={`-left-[50%] -translate-x-1/2 flex items-center justify-center fixed top-0 z-50 ${className}`}
+        color={backgroundColor}
+        bgClassName={bgClassName}
+        eachCorner={{
+          br: { enabled: false },
+          tr: { enabled: true, backgroundColor: "bg-secondary" },
+          bl: { enabled: false },
+          tl: { enabled: true, backgroundColor: "bg-secondary" },
+        }}
+        radius={radius}
+        side="top"
+        height={height}
+        width={width}
+        cornerSize={cornerSize}
+      >
+        <nav className="flex flex-col gap-2">
+          <ul className={`flex ${navGap}`}>
+            {links.map((link, index) => (
+              <li
+                key={index}
+                className={textClassName || textColorStyle.className || ""}
+                style={textColorStyle.style}
               >
-                {link.label}
-              </a>
-            </li>
-          ))}
-        </ul>
-      </nav>
-    </SideTab>
-  );
-};
+                <a
+                  href={link.href}
+                  target={link.target}
+                  rel={link.rel}
+                  className="hover:opacity-80 transition-opacity"
+                >
+                  {link.label}
+                </a>
+              </li>
+            ))}
+          </ul>
+        </nav>
+      </SideTab>
+    );
+  }
+);
+
+Header.displayName = "Header";

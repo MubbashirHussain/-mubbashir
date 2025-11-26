@@ -1,6 +1,9 @@
 import { useElementUnits } from "@/hooks/use-element-units";
-import { useRef } from "react";
+import { useEffect, useRef } from "react";
 import { cn } from "@/lib/utils";
+import Charge from "./svg/charge";
+import gsap from "gsap";
+import { scale } from "framer-motion";
 
 interface BatteryIconProps {
   batteryPercentage: number;
@@ -11,6 +14,25 @@ interface BatteryIconProps {
   textColor?: string;
   tipColor?: string;
   showInSide?: boolean;
+  showCharging?: boolean;
+}
+
+function AnimatedCharge() {
+  const divRef = useRef<HTMLDivElement>(null);
+  useEffect(() => {
+    gsap.from(divRef, {
+      scale: 0,
+      duration: 1,
+    });
+  }, []);
+  return (
+    <div
+      ref={divRef}
+      className="absolute h-[calc(100%+6px)] w-full top-[50%] left-[50%] -translate-x-1/2 -translate-y-1/2"
+    >
+      <Charge className="z-10 fill-green-500" />
+    </div>
+  );
 }
 
 export default function BatteryIcon({
@@ -22,6 +44,7 @@ export default function BatteryIcon({
   textColor,
   tipColor = "bg-secondary",
   showInSide = false,
+  showCharging = false,
 }: BatteryIconProps) {
   const batteryRef = useRef<HTMLDivElement>(null);
   const toPxBattery = useElementUnits(batteryRef);
@@ -52,14 +75,17 @@ export default function BatteryIcon({
               width: `calc(${batteryWidth}px - 5px)`,
             }}
           ></div>
-          {showInSide && <div
-            className={cn(
-              "h-[calc(100%-2px)] w-full rounded absolute text-xs flex justify-center items-center",
-              textColor
-            )}
-          >
-            {batteryPercentage}%
-          </div>}
+          {showCharging && <AnimatedCharge />}
+          {showInSide && (
+            <div
+              className={cn(
+                "h-[calc(100%-2px)] w-full rounded absolute text-xs flex justify-center items-center",
+                textColor
+              )}
+            >
+              {batteryPercentage}%
+            </div>
+          )}
         </div>
         <span
           className={cn("rounded-full", tipColor)}

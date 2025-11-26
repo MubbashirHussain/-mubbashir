@@ -1,8 +1,10 @@
+"use client";
+
 import { Container } from "@/components/ui/container";
 import { Header, NavLink } from "@/components/layout/header";
 import { SideTab } from "@/components/ui/side-tab";
 import { ImageGallery } from "@/components/ui/image-gallery";
-import { useRef } from "react";
+import { useRef, useLayoutEffect, useState } from "react";
 import { useElementUnits } from "@/hooks/use-element-units";
 import { FloatingIcon, ProfileImage } from "@/components/ui/profile-image";
 import BatteryIcon from "@/components/ui/batteryIcon";
@@ -14,12 +16,94 @@ import {
   Linkedin,
 } from "lucide-react";
 import { tailwindToHex } from "@/lib/color-utils";
-import { HeroLeftSection } from "./hero-section";
+import { HeroLeftSection } from "./leftSection";
+import gsap from "gsap";
 
 export default function HeroSection() {
   const parentRef = useRef<HTMLDivElement>(null);
   const containerRef = useRef<HTMLDivElement>(null);
   const toPxContainer = useElementUnits(containerRef);
+
+  // Animation Refs
+  const headerRef = useRef<HTMLDivElement>(null);
+  const heroLeftRef = useRef<HTMLDivElement>(null);
+  const scrollTabRef = useRef<HTMLDivElement>(null);
+  const galleryRef = useRef<HTMLDivElement>(null);
+  const batteryRef = useRef<HTMLDivElement>(null);
+  const shapeRef = useRef<HTMLDivElement>(null);
+  const rightSideTab1Ref = useRef<HTMLDivElement>(null);
+  const rightSideTab2Ref = useRef<HTMLDivElement>(null);
+  const profileRef = useRef<HTMLDivElement>(null);
+
+  const [isCharging, setIsCharging] = useState<boolean>(false);
+  const onClickChargeHandle = () => {
+    // setIsCharging(!isCharging);
+    setIsCharging(true);
+  };
+
+  useLayoutEffect(() => {
+    const ctx = gsap.context(() => {
+      const tl = gsap.timeline({ defaults: { ease: "power3.out" } });
+
+      // Initial states are handled by 'from' tweens
+
+      tl.from(headerRef.current, {
+        y: -100,
+        opacity: 0,
+        duration: 1,
+        delay: 0.4,
+      })
+        .from(
+          galleryRef.current,
+          {
+            x: -200,
+            duration: 1,
+          },
+          "-=0.8"
+        )
+        .from(
+          scrollTabRef.current,
+          {
+            y: 50,
+            opacity: 0,
+            duration: 0.8,
+          },
+          "-=.8"
+        )
+
+        // Right side animations
+        .from(
+          batteryRef.current,
+          {
+            width: "60px",
+            opacity: 0,
+            duration: 1,
+            ease: "back.out(1)",
+          },
+          "-=1"
+        )
+        .from(
+          shapeRef.current,
+          {
+            x: 300,
+            duration: 0.8,
+            // transformOrigin: "center center",
+          },
+          "-=0.8"
+        )
+        .from(
+          profileRef.current,
+          {
+            x: 100,
+            opacity: 0,
+            duration: 1,
+          },
+          "-=0.6"
+        );
+    }, containerRef); // Scope to containerRef
+
+    return () => ctx.revert();
+  }, []);
 
   // Navigation links configuration
   const navLinks: NavLink[] = [
@@ -49,7 +133,9 @@ export default function HeroSection() {
   return (
     <div>
       {/* Header */}
+
       <Header
+        ref={headerRef}
         links={navLinks}
         bgClassName="bg-secondary"
         textClassName="text-text-inverse"
@@ -65,15 +151,15 @@ export default function HeroSection() {
             ref={parentRef}
             className="col-span-7 justify-start flex items-center"
           >
-            <HeroLeftSection
-              name="Mubbashir"
-              description="I'm a digital designer and developer crafting nurturing digital environments. Like a peaceful sanctuary in the city, I build interfaces that are both invigorating and accessible, suitable for all users."
-              ctaText="Get in touch"
-              onCtaClick={() => console.log("CTA clicked")}
-              showOpenToWork={true}
-              // accentClassName="text-primary"
-              // ctaBgClassName="bg-primary"
-            />
+            <div ref={heroLeftRef} className="w-full">
+              <HeroLeftSection
+                name="Mubbashir"
+                description="I'm a digital designer and developer crafting nurturing digital environments. Like a peaceful sanctuary in the city, I build interfaces that are both invigorating and accessible, suitable for all users."
+                ctaText="Get in touch"
+                onCtaClick={() => console.log("CTA clicked")}
+                showOpenToWork={true}
+              />
+            </div>
           </div>
 
           {/* Decorative Side Tab */}
@@ -94,9 +180,10 @@ export default function HeroSection() {
 
           <SideTab
             // top=""
+            ref={scrollTabRef}
             bottom="0%"
             left="25%"
-            className={`-left-[50%] -translate-x-1/2 z-30 flex items-center justify-center `}
+            className={`-left-[50%] -translate-x-1/2 flex z-20 items-center justify-center pointer-events-auto`}
             color={"bg-secondary"}
             bgClassName="bg-background"
             eachCorner={{
@@ -117,22 +204,27 @@ export default function HeroSection() {
           </SideTab>
           {/* Bottom Image Gallery */}
           <ImageGallery
+            ref={galleryRef}
             imageCount={3}
             bgClassName="bg-primary"
             borderRadius="60px"
             width="50%"
             height="30%"
             position={{ bottom: "0", left: "0" }}
-            className=""
+            className="pointer-events-auto"
           />
 
           {/* Spacer */}
           <div className="col-span-1"></div>
           {/* Right Column - Profile Image */}
           <div className="col-span-4 flex flex-col ">
-            <div className="bg-secondary flex justify-between items-center p-2 px-3 w-[80%] my-3 rounded-full h-[60px]  self-baseline-last">
+            <div
+              className="bg-secondary flex justify-between items-center p-2 px-3 w-[80%] my-3 rounded-full h-[60px]  self-baseline-last"
+              ref={batteryRef}
+            >
               <BatteryIcon
                 className="ms-2"
+                showCharging={isCharging}
                 batteryPercentage={82}
                 bgColor=""
                 tipColor="bg-white"
@@ -140,7 +232,10 @@ export default function HeroSection() {
                 fillColor="bg-white"
                 textColor="text-white"
               />
-              <div className="group flex h-10 items-center border border-white rounded-full p-2 transition-all duration-300 hover:bg-white hover:text-secondary text-white cursor-pointer hover:pr-4">
+              <div
+                onClick={onClickChargeHandle}
+                className="group flex h-10 items-center border border-white rounded-full p-2 transition-all duration-300 hover:bg-white hover:text-secondary text-white cursor-pointer hover:pr-4"
+              >
                 <div className="w-6 h-6 flex items-center justify-center">
                   <Charge className="w-5 h-5" />
                 </div>
@@ -152,6 +247,7 @@ export default function HeroSection() {
 
             {/* Background Shape */}
             <div
+              ref={shapeRef}
               className={`h-[80%] w-[43%] right-0 bg-primary absolute top-[10%]`}
               style={{
                 borderRadius: toPxContainer("5%"),
@@ -159,41 +255,53 @@ export default function HeroSection() {
             />
 
             {/* Decorative Side Tabs */}
-            <SideTab
-              top="10%"
-              right="0%"
-              bgClassName="bg-primary"
-              eachCorner={{
-                br: { enabled: true },
-                tr: { enabled: false },
-                bl: { enabled: false },
-                tl: { enabled: false },
-              }}
-              side="right"
-              cornerSize={40}
-            />
-            <SideTab
-              bottom="10%"
-              right="0%"
-              bgClassName="bg-primary"
-              eachCorner={{
-                br: { enabled: false },
-                tr: { enabled: true },
-                bl: { enabled: false },
-                tl: { enabled: false },
-              }}
-              side="right"
-              cornerSize={100}
-            />
+            <div
+              ref={rightSideTab1Ref}
+              className="absolute inset-0 pointer-events-none"
+            >
+              <SideTab
+                top="10%"
+                right="0%"
+                bgClassName="bg-primary"
+                eachCorner={{
+                  br: { enabled: true },
+                  tr: { enabled: false },
+                  bl: { enabled: false },
+                  tl: { enabled: false },
+                }}
+                side="right"
+                cornerSize={40}
+              />
+            </div>
+            <div
+              ref={rightSideTab2Ref}
+              className="absolute inset-0 pointer-events-none"
+            >
+              <SideTab
+                bottom="10%"
+                right="0%"
+                bgClassName="bg-primary"
+                eachCorner={{
+                  br: { enabled: false },
+                  tr: { enabled: true },
+                  bl: { enabled: false },
+                  tl: { enabled: false },
+                }}
+                side="right"
+                cornerSize={100}
+              />
+            </div>
 
             {/* Profile Image with Tilt Effect */}
-            <ProfileImage
-              imageSrc="/hero-person.png"
-              imageAlt="Mubbashir Portrait"
-              frameBgClassName="bg-primary"
-              grayscale={true}
-              floatingIcons={floatingIcons}
-            />
+            <div ref={profileRef} className="z-10">
+              <ProfileImage
+                imageSrc="/hero-person.png"
+                imageAlt="Mubbashir Portrait"
+                frameBgClassName="bg-primary"
+                grayscale={true}
+                floatingIcons={floatingIcons}
+              />
+            </div>
           </div>
         </div>
       </Container>
