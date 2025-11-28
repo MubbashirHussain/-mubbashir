@@ -73,7 +73,7 @@ export const ImageGallery = React.forwardRef(
 
     return (
       <div
-        ref={ref}
+        ref={ref as any}
         className={`flex flex-wrap ${gap} absolute z-10 ${padding} ${
           bgClassName || bgStyle.className || ""
         } ${className}`}
