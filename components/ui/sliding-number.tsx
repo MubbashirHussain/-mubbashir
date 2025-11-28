@@ -5,8 +5,8 @@ import {
   motion,
   useSpring,
   useTransform,
-  motionValue,
-} from "motion/react";
+  useMotionValue,
+} from "framer-motion";
 import useMeasure from "react-use-measure";
 
 const TRANSITION = {
@@ -18,7 +18,7 @@ const TRANSITION = {
 
 function Digit({ value, place }: { value: number; place: number }) {
   const valueRoundedToPlace = Math.floor(value / place) % 10;
-  const initial = motionValue(valueRoundedToPlace);
+  const initial = useMotionValue(valueRoundedToPlace);
   const animatedValue = useSpring(initial, TRANSITION);
 
   useEffect(() => {
