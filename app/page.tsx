@@ -2,6 +2,7 @@
 
 import HeroSection from "@/components/sections/hero";
 import { Container } from "@/components/ui/container";
+import Terminal from "@/components/ui/terminal";
 
 export default function Home() {
   return (
@@ -9,6 +10,7 @@ export default function Home() {
       <div className="bg-primary">
         <HeroSection />
       </div>
+      <Terminal />
       <div className="bg-background">
         <Container>
           <div className="h-screen"></div>
