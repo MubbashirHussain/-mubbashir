@@ -30,28 +30,97 @@ export const useTerminal = (
   const getCurrentFs = useCallback((dir: string) => FILE_SYSTEM[dir], []);
 
   // --- Tab Completion Logic ---
-  const findPathCompletions = useCallback(
+  const findCompletions = useCallback(
     (currentInput: string, currentDir: string) => {
-      const parts = currentInput.trim().split(/\s+/);
-      const command = parts[0].toLowerCase();
+      const trimmedInput = currentInput.trim();
+      const parts = trimmedInput.split(/\s+/);
+      const firstWord = parts[0].toLowerCase();
 
-      if (!["cd", "cat"].includes(command)) {
-        return { matches: [], prefix: "" };
+      // Define all available commands
+      const baseCommands = [
+        "whoami",
+        "help",
+        "ls",
+        "cd",
+        "pwd",
+        "cat",
+        "clear",
+        "sudo",
+      ];
+
+      // If input is empty or only partial first word, complete command names
+      if (parts.length === 1) {
+        const matches = baseCommands.filter((cmd) =>
+          cmd.toLowerCase().startsWith(firstWord.toLowerCase())
+        );
+        return { matches, prefix: firstWord, type: "command" as const };
       }
 
-      const currentPathPart = parts[1] || "";
-      const dirData = getCurrentFs(currentDir);
-      const contents = dirData?.contents || {};
-      const candidates = Object.keys(contents);
+      // Handle sudo commands
+      if (firstWord === "sudo") {
+        const sudoCommands = ["ls", "set", "make"];
 
-      const matches = candidates.filter((name) =>
-        name.toLowerCase().startsWith(currentPathPart.toLowerCase())
-      );
+        if (parts.length === 2) {
+          // Complete sudo subcommand (ls, set, make)
+          const matches = sudoCommands.filter((cmd) =>
+            cmd.toLowerCase().startsWith(parts[1].toLowerCase())
+          );
+          return {
+            matches,
+            prefix: parts[1],
+            type: "sudo-subcommand" as const,
+          };
+        } else if (parts.length === 3) {
+          // Complete sudo ls themes or sudo set theme
+          if (parts[1].toLowerCase() === "ls") {
+            const matches = ["themes"].filter((opt) =>
+              opt.toLowerCase().startsWith(parts[2].toLowerCase())
+            );
+            return { matches, prefix: parts[2], type: "sudo-option" as const };
+          } else if (parts[1].toLowerCase() === "set") {
+            const matches = ["theme"].filter((opt) =>
+              opt.toLowerCase().startsWith(parts[2].toLowerCase())
+            );
+            return { matches, prefix: parts[2], type: "sudo-option" as const };
+          } else if (parts[1].toLowerCase() === "make") {
+            const matches = ["coffee"].filter((opt) =>
+              opt.toLowerCase().startsWith(parts[2].toLowerCase())
+            );
+            return { matches, prefix: parts[2], type: "sudo-option" as const };
+          }
+        } else if (
+          parts.length === 4 &&
+          parts[1].toLowerCase() === "set" &&
+          parts[2].toLowerCase() === "theme"
+        ) {
+          // Complete theme names
+          const themes = Object.keys(PALETTES);
+          const matches = themes.filter((theme) =>
+            theme.toLowerCase().startsWith(parts[3].toLowerCase())
+          );
+          return { matches, prefix: parts[3], type: "theme" as const };
+        }
+      }
 
-      return {
-        matches: matches,
-        prefix: currentPathPart,
-      };
+      // Handle path-based commands (cd, cat)
+      if (["cd", "cat"].includes(firstWord) && parts.length === 2) {
+        const currentPathPart = parts[1] || "";
+        const dirData = getCurrentFs(currentDir);
+        const contents = dirData?.contents || {};
+        const candidates = Object.keys(contents);
+
+        const matches = candidates.filter((name) =>
+          name.toLowerCase().startsWith(currentPathPart.toLowerCase())
+        );
+
+        return {
+          matches: matches,
+          prefix: currentPathPart,
+          type: "path" as const,
+        };
+      }
+
+      return { matches: [], prefix: "", type: "none" as const };
     },
     [getCurrentFs]
   );
@@ -255,32 +324,60 @@ export const useTerminal = (
         e.preventDefault();
         if (isTyping) return;
 
-        const { matches } = findPathCompletions(input, currentDir);
-        const command = input.trim().split(/\s+/)[0];
+        const { matches, prefix, type } = findCompletions(input, currentDir);
+        const parts = input.trim().split(/\s+/);
 
         if (matches.length === 1) {
           const match = matches[0];
-          const dirData = getCurrentFs(currentDir);
-          const isDir = dirData?.contents?.[match]?.type === "dir";
+          let newCmd = "";
 
-          let newCmd = `${command} ${match}`;
-          newCmd += isDir ? "/" : " ";
+          // Build the completed command based on type
+          if (type === "command") {
+            newCmd = match + " ";
+          } else if (type === "sudo-subcommand") {
+            newCmd = `sudo ${match} `;
+          } else if (type === "sudo-option") {
+            newCmd = `${parts[0]} ${parts[1]} ${match} `;
+          } else if (type === "theme") {
+            newCmd = `${parts[0]} ${parts[1]} ${parts[2]} ${match}`;
+          } else if (type === "path") {
+            const command = parts[0];
+            const dirData = getCurrentFs(currentDir);
+            const isDir = dirData?.contents?.[match]?.type === "dir";
+            newCmd = `${command} ${match}`;
+            newCmd += isDir ? "/" : " ";
+          }
 
           setInput(newCmd);
         } else if (matches.length > 1) {
+          // Show all possible completions
           setHistory((prev) => [...prev, `${currentDir} % ${input} :`]);
 
           const accentColor =
             PALETTES[themeName]?.accent || PALETTES.dark.accent;
-          const completionsOutput = matches
-            .map((name) => {
-              const dirData = getCurrentFs(currentDir);
-              const isDir = dirData?.contents?.[name]?.type === "dir";
-              return isDir
-                ? `<span style="color:${accentColor}; font-weight: bold;">${name}/</span>`
-                : `${name}`;
-            })
-            .join("    ");
+
+          let completionsOutput = "";
+
+          if (type === "path") {
+            // For paths, show directories with special formatting
+            completionsOutput = matches
+              .map((name: string) => {
+                const dirData = getCurrentFs(currentDir);
+                const isDir = dirData?.contents?.[name]?.type === "dir";
+                return isDir
+                  ? `<span style="color:${accentColor}; font-weight: bold;">${name}/</span>`
+                  : `${name}`;
+              })
+              .join("    ");
+          } else {
+            // For commands and other completions, just list them
+            completionsOutput = matches
+              .map(
+                (name: string) =>
+                  `<span style="color:${accentColor};">${name}</span>`
+              )
+              .join("    ");
+          }
 
           await typeOutput([completionsOutput], TYPING_SPEED / 3);
         }
@@ -334,7 +431,7 @@ export const useTerminal = (
       executeCommand,
       commandHistory,
       historyIndex,
-      findPathCompletions,
+      findCompletions,
       currentDir,
       typeOutput,
       getCurrentFs,
