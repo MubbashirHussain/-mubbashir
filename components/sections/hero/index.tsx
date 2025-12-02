@@ -26,7 +26,6 @@ export default function HeroSection() {
 
   // Animation Refs
   const headerRef = useRef<HTMLDivElement>(null);
-  const heroLeftRef = useRef<HTMLDivElement>(null);
   const scrollTabRef = useRef<HTMLDivElement>(null);
   const galleryRef = useRef<HTMLDivElement>(null);
   const batteryRef = useRef<HTMLDivElement>(null);
@@ -163,7 +162,7 @@ export default function HeroSection() {
             ref={parentRef}
             className="col-span-7 justify-start flex items-center"
           >
-            <div ref={heroLeftRef} className="w-full">
+            <div className="w-full">
               <HeroLeftSection
                 name="Mubbashir"
                 description="I'm a digital designer and developer crafting nurturing digital environments. Like a peaceful sanctuary in the city, I build interfaces that are both invigorating and accessible, suitable for all users."

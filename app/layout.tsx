@@ -3,7 +3,7 @@ import { Outfit } from "next/font/google";
 import "./globals.css";
 import SmoothScroll from "@/components/animations/SmoothScroll";
 import { ThemeProvider } from "@/components/providers/theme-provider";
-
+import ClientWrapper from "@/components/layout/ClientWrapper";
 const outfit = Outfit({ subsets: ["latin"], variable: "--font-outfit" });
 
 export const metadata: Metadata = {
@@ -22,7 +22,9 @@ export default function RootLayout({
         className={`${outfit.variable} bg-black text-white antialiased selection:bg-white selection:text-black`}
       >
         <ThemeProvider attribute="class" enableSystem disableTransitionOnChange>
-          <SmoothScroll>{children}</SmoothScroll>
+          <SmoothScroll>
+            <ClientWrapper>{children}</ClientWrapper>
+          </SmoothScroll>
         </ThemeProvider>
       </body>
     </html>

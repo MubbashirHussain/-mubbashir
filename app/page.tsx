@@ -10,12 +10,12 @@ export default function Home() {
       <div className="bg-primary">
         <HeroSection />
       </div>
-      <Terminal />
-      <div className="bg-background">
+      {/* <Terminal /> */}
+      {/* <div className="bg-background">
         <Container>
           <div className="h-screen"></div>
         </Container>
-      </div>
+      </div> */}
     </main>
   );
 }

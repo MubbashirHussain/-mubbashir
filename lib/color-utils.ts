@@ -1,3 +1,4 @@
+"use client";
 /**
  * Color Utility Functions
  * Helper functions to work with the color system
@@ -98,17 +99,17 @@ export function getColorStyle(
  * If a hex string is supplied, it is returned unchanged.
  */
 export function tailwindToHex(colorClass: string): string {
-  // Ensure input is a string
+  // Guard against non‑string input
   if (typeof colorClass !== "string") {
     return colorClass || "";
   }
 
-  // Return hex colors unchanged
+  // If it's already a hex value, return it unchanged
   if (isHexColor(colorClass)) {
     return colorClass;
   }
 
-  // Remove possible prefix (bg-, text-, border-)
+  // Remove Tailwind prefixes (bg-, text-, border-)
   const parts = colorClass.split("-");
   const prefixSet = new Set(["bg", "text", "border"]);
   let idx = 0;
@@ -118,6 +119,30 @@ export function tailwindToHex(colorClass: string): string {
   const name = parts[idx];
   const shade = parts[idx + 1];
 
+  // ------------------------------------------------------------
+  // 1️⃣ Try to read a CSS custom property from :root.
+  // ------------------------------------------------------------
+  // Expected naming in globals.css (example):
+  //   --color-primary-500: #bbff00;
+  //   --color-secondary-100: #e5e5e5;
+  //   --color-accent: #3b82f6; // default shade
+  // Build the CSS variable name based on the Tailwind class.
+  const cssVarName = shade ? `--color-${name}-${shade}` : `--color-${name}`;
+
+  // Access the computed style of the root element.
+  if (typeof window !== "undefined" && typeof document !== "undefined") {
+    const rootStyles = getComputedStyle(document.documentElement);
+    const cssValue = rootStyles.getPropertyValue(cssVarName).trim();
+    if (cssValue) {
+      // If the CSS variable already contains a hex value, return it.
+      // It might also be an rgb/hsl string – we keep it as‑is for now.
+      return cssValue;
+    }
+  }
+
+  // ------------------------------------------------------------
+  // 2️⃣ Fallback to a hard‑coded map for legacy colors.
+  // ------------------------------------------------------------
   const hexMap: Record<string, Record<string, string>> = {
     primary: {
       "50": "#f7ffe6",
@@ -145,6 +170,9 @@ export function tailwindToHex(colorClass: string): string {
       "900": "#1f1f1f",
       DEFAULT: "#1f1f1f",
     },
+    "background-inverse": {
+      DEFAULT: "#1f1f1f",
+    },
     accent: {
       "50": "#eff6ff",
       "100": "#dbeafe",
@@ -168,6 +196,7 @@ export function tailwindToHex(colorClass: string): string {
 
   const group = hexMap[name];
   if (!group) {
+    // If we can't resolve, return the original class – the caller may handle it.
     return colorClass;
   }
 

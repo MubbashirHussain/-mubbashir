@@ -1,3 +1,5 @@
+"use client";
+import { useTailwindHex } from "@/hooks/use-tailwind-hex";
 import { getColorStyle, tailwindToHex } from "@/lib/color-utils";
 import React, { useId } from "react";
 
@@ -49,13 +51,18 @@ export const InvertedCorner = ({
 
   const pathD = "M 0 100 L 100 100 L 100 0 A 100 100 0 0 0 0 100 Z";
   const isTransparentFill = fillColor === "transparent";
-  // Convert Tailwind class or hex to a hex string for the background fill
-  const bgHex = tailwindToHex(backgroundColor || "transparent");
+
+  // Use the hook to resolve colors on the client side
+  const bgFill = useTailwindHex(backgroundColor, "transparent");
+  const fill = useTailwindHex(fillColor, "currentColor");
+
+  // Merge any provided className
+  const combinedClassName = `${className}`.trim();
 
   return (
     <svg
       viewBox={viewBox}
-      className={className}
+      className={combinedClassName}
       style={{
         transform: `rotate(${rotate}deg)`,
         ...style,
@@ -74,19 +81,17 @@ export const InvertedCorner = ({
           <rect
             width="100"
             height="100"
-            fill={bgHex}
+            fill={bgFill}
             mask={`url(#${maskId})`}
           />
         </>
       ) : (
         <>
           {/* Optional Background Layer (The part that gets "cut out") */}
-          {bgHex !== "transparent" && (
-            <rect width="100" height="100" fill={bgHex} />
-          )}
+          {bgFill && <rect width="100" height="100" fill={bgFill} />}
 
           {/* The Inverted Corner Shape */}
-          <path d={pathD} fill={fillColor || "currentColor"} />
+          <path d={pathD} fill={fill || "currentColor"} />
         </>
       )}
     </svg>

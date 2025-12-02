@@ -1,4 +1,4 @@
-import React, { useEffect, useRef } from "react";
+import { useEffect, useRef } from "react";
 import { ArrowUpRight } from "lucide-react";
 import { SideTab } from "@/components/ui/side-tab";
 import { getColorStyle } from "@/lib/color-utils";
@@ -57,19 +57,26 @@ export const HeroLeftSection = ({
   const TextSectionRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
-    if (blobRef.current) {
-      gsap.from([blobRef.current, blobRef1.current], {
+    const ctx = gsap.context(() => {
+      const tl = gsap.timeline();
+      tl.from([blobRef.current, blobRef1.current], {
         y: -300,
         duration: 1.5,
         ease: "power3.out",
       });
-      gsap.from(TextSectionRef.current, {
-        opacity: 0,
-        y: 20,
-        duration: 1,
-        ease: "power3.out",
-      });
-    }
+      tl.from(
+        TextSectionRef.current,
+        {
+          opacity: 0,
+          y: 20,
+          duration: 1,
+          ease: "power3.out",
+        },
+        "-=1" // Overlap slightly so it doesn't wait full 1.5s
+      );
+    });
+
+    return () => ctx.revert();
   }, []);
 
   return (
