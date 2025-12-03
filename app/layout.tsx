@@ -19,7 +19,7 @@ export default function RootLayout({
   return (
     <html lang="en" suppressHydrationWarning>
       <body
-        className={`${outfit.variable} bg-black text-white antialiased selection:bg-white selection:text-black`}
+        className={`${outfit.variable} bg-white text-black antialiased selection:bg-white selection:text-black`}
       >
         <ThemeProvider attribute="class" enableSystem disableTransitionOnChange>
           <SmoothScroll>
