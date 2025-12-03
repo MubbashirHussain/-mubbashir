@@ -129,14 +129,14 @@ export default function Terminal() {
         />
 
         <TerminalOutput
-          terminalRef={terminalRef}
+          terminalRef={terminalRef as any}
           palette={palette}
           isTerminalOpen={isTerminalOpen}
           history={history}
           currentDir={currentDir}
           input={input}
           isTyping={isTyping}
-          inputRef={inputRef}
+          inputRef={inputRef as any}
           onInputChange={setInput}
           onKeyDown={handleKeyPress}
           onFocusInput={focusInput}
