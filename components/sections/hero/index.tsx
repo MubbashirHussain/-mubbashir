@@ -143,17 +143,6 @@ export default function HeroSection() {
 
   return (
     <div>
-      {/* Header */}
-
-      <Header
-        ref={headerRef}
-        links={navLinks}
-        bgClassName="bg-secondary"
-        textClassName="text-text-inverse"
-        width="30%"
-        height="7%"
-      />
-
       {/* Hero Section */}
       <Container className="h-screen bg-background relative max-h-[1020px]">
         <div className="grid grid-cols-12 gap-5 h-full" ref={containerRef}>

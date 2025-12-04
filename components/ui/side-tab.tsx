@@ -68,7 +68,10 @@ interface SideTabProps {
   /** Configuration for each corner (tl, tr, bl, br) */
   eachCorner?: EachCornerConfig;
   /** Additional classes */
+  /** Additional classes */
   className?: string;
+  /** Inline styles */
+  style?: React.CSSProperties;
   /** Side to attach the tab to */
   side?: "left" | "right" | "top" | "bottom";
   /** Child elements to render inside the tab */
@@ -116,6 +119,7 @@ export const SideTab = React.forwardRef<HTMLDivElement, SideTabProps>(
       cornerSize = "40px",
       eachCorner = {},
       className = "",
+      style = {},
       side = "left",
       children,
     },
@@ -171,6 +175,7 @@ export const SideTab = React.forwardRef<HTMLDivElement, SideTabProps>(
       bottom,
       ...bgStyle.style,
       ...borderRadiusStyle,
+      ...style,
     };
 
     // Define default corner configuration

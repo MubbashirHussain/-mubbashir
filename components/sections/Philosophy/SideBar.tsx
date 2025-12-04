@@ -41,11 +41,11 @@ const SidebarNav: React.FC<SidebarNavProps> = ({
                 ${
                   isActive
                     ? "text-text-main"
-                    : "text-text-muted group-hover:text-primary"
+                    : "text-text-muted"
                 }
               `}
             >
-              {/* {item.iconName} */}
+              {item.iconName}
             </span>
             <p
               className={`

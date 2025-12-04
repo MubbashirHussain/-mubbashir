@@ -97,7 +97,7 @@ const PhilosophySection: React.FC = () => {
 
   return (
     <div className="relative flex flex-col w-full group/design-root overflow-x-hidden">
-      <main className="flex-1 px-6 md:px-10 lg:px-20 pt-16 lg:pt-24 header-height">
+      <main className="flex-1 px-6 md:px-10 lg:px-20 pt-5 lg:pt-10">
         <div className="mx-auto max-w-7xl">
           {/* Page Title */}
           <div className="mb-1 lg:mb-24 animate-in fade-in duration-700 slide-in-from-bottom-4">
@@ -128,20 +128,25 @@ const PhilosophySection: React.FC = () => {
               <p className="text-sm font-bold text-text-muted uppercase mb-4">
                 Jump to section:
               </p>
-              <div className="flex flex-wrap gap-2">
-                {navItems.map((item) => (
-                  <a
-                    key={item.id}
-                    href={item.href}
-                    onClick={(e) => handleNavClick(e, item.id)}
-                    className={`px-3 py-2 rounded-full border text-sm font-medium transition-colors ${
-                      activeId === item.id
-                        ? "bg-primary border-primary text-text-main"
-                        : "bg-transparent border-black/10 text-text-muted hover:border-black/30"
-                    }`}
-                  >
-                    {item.label}
-                  </a>
+              <div className="flex flex-wrap gap-2 border border-black/10 rounded-lg p-2">
+                {navItems.map((item, index) => (
+                  <div className="flex items-center gap-2">
+                    <a
+                      key={item.id}
+                      href={item.href}
+                      onClick={(e) => handleNavClick(e, item.id)}
+                      className={`px-3 py-1 text-sm font-medium transition-colors ${
+                        activeId === item.id
+                          ? "bg-primary-100 border-primary-300 text-text-main"
+                          : "bg-transparent border-black/10 text-text-muted hover:border-black/30"
+                      }`}
+                    >
+                      {item.label}
+                    </a>
+                    {index < navItems.length - 1 && (
+                      <span className="w-px h-4 bg-black/10" />
+                    )}
+                  </div>
                 ))}
               </div>
             </div>

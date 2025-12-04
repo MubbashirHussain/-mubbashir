@@ -54,6 +54,8 @@ export interface HeaderProps {
   cornerSize?: number;
   /** Additional classes for the header container */
   className?: string;
+  /** Inline styles for the header container */
+  style?: React.CSSProperties;
   /** Gap between navigation links */
   navGap?: string;
 }
@@ -94,6 +96,7 @@ export const Header = React.forwardRef(
       radius = "40px",
       cornerSize = 40,
       className = "",
+      style,
       navGap = "gap-8",
     }: HeaderProps,
     ref
@@ -109,6 +112,7 @@ export const Header = React.forwardRef(
         top="0"
         left="50%"
         className={`-left-[50%] -translate-x-1/2 flex items-center justify-center fixed top-0 z-50 ${className} max-h-[100px]`}
+        style={style}
         color={backgroundColor}
         bgClassName={bgClassName}
         eachCorner={{
