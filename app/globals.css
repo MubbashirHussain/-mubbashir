@@ -180,4 +180,15 @@ body {
   .font-space-grotesk {
     font-family: var(--font-space-grotesk), sans-serif;
   }
+  .scrollbar-hidden {
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+  }
+
+  .scrollbar-hidden::-webkit-scrollbar {
+    display: none;
+  }
+  .header-height {
+    padding-top: 100px;
+  }
 }
