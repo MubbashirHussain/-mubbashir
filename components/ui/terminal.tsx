@@ -14,7 +14,7 @@ export default function Terminal() {
   const { theme, setTheme } = useTheme();
   const [mounted, setMounted] = useState(false);
   const [isTerminalOpen, setIsTerminalOpen] = useState(true);
-  const [isVisible, setIsVisible] = useState(true);
+  const [isVisible, setIsVisible] = useState(false);
   const [terminalHeight, setTerminalHeight] = useState(INITIAL_HEIGHT_VH);
   const [isResizing, setIsResizing] = useState(false);
   const containerRef = useRef<HTMLDivElement>(null);

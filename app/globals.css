@@ -56,8 +56,9 @@
   --color-accent-800: #1e40af;
   --color-accent-900: #1e3a8a;
   --color-accent: #3b82f6;
+  --font-outfit: "Outfit", sans-serif;
+  --font-space-grotesk: "Space Grotesk", sans-serif;
 }
-
 .dark {
   /* Text colors - Dark mode */
   --color-text: #f9fafb;
@@ -172,5 +173,11 @@ body {
 @layer utilities {
   .text-balance {
     text-wrap: balance;
+  }
+  .font-outfit {
+    font-family: var(--font-outfit), sans-serif;
+  }
+  .font-space-grotesk {
+    font-family: var(--font-space-grotesk), sans-serif;
   }
 }

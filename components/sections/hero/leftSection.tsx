@@ -155,7 +155,7 @@ export const HeroLeftSection = ({
         )}
 
         {/* Heading */}
-        <h1 className="text-5xl md:text-7xl font-black leading-[1.1] mb-6 tracking-tight text-text">
+        <h1 className="text-4xl md:text-6xl font-extrabold leading-[1.1] mb-6 tracking-tight text-text">
           Hey, I am{" "}
           <span className="relative">
             {name}
@@ -180,7 +180,7 @@ export const HeroLeftSection = ({
         </h1>
 
         {/* Description */}
-        <p className="text-text-secondary text-lg leading-relaxed mb-10 max-w-lg">
+        <p className="text-text-secondary text-lg leading-relaxed mb-10 max-w-lg font-space-grotesk">
           {description}
         </p>
 

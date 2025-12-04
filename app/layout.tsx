@@ -1,11 +1,14 @@
 import type { Metadata } from "next";
-import { Outfit } from "next/font/google";
+import { Outfit, Space_Grotesk } from "next/font/google";
 import "./globals.css";
 import SmoothScroll from "@/components/animations/SmoothScroll";
 import { ThemeProvider } from "@/components/providers/theme-provider";
 import ClientWrapper from "@/components/layout/ClientWrapper";
 const outfit = Outfit({ subsets: ["latin"], variable: "--font-outfit" });
-
+export const spaceGrotesk = Space_Grotesk({
+  subsets: ["latin"],
+  variable: "--font-space-grotesk",
+});
 export const metadata: Metadata = {
   title: "Mubbashir | Creative Developer",
   description: "Portfolio of a Creative Developer",
