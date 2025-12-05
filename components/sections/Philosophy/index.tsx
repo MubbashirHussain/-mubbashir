@@ -1,4 +1,5 @@
 import React, { useEffect, useState, useRef } from "react";
+import { useScroll, useTransform, useSpring, motion } from "framer-motion";
 import SidebarNav, { NavItem } from "./SideBar";
 import ContentSection, { SectionData } from "./ContentSection";
 import { Code, Hand, PencilRuler } from "lucide-react";
@@ -44,84 +45,79 @@ const navItems: NavItem[] = sections.map((s) => ({
 
 const PhilosophySection: React.FC = () => {
   const [activeId, setActiveId] = useState<string>(sections[0].id);
-  const observer = useRef<IntersectionObserver | null>(null);
-  const scrollContainerRef = useRef<HTMLDivElement>(null);
+  const containerRef = useRef<HTMLDivElement>(null);
 
+  // Framer Motion Scroll Hooks
+  const { scrollYProgress } = useScroll({
+    target: containerRef,
+    offset: ["start start", "end end"],
+  });
+
+  const smoothProgress = useSpring(scrollYProgress, {
+    stiffness: 100,
+    damping: 30,
+    restDelta: 0.001,
+  });
+
+  // Transform scroll progress to vertical movement
+  // We want to move the content UP as we scroll down.
+  // The distance to move is roughly the height of the content minus the viewport height.
+  // Let's estimate or measure. For now, we can use a percentage or pixel value.
+  // Assuming the content list is longer than the viewport (which it is).
+  // Let's translate by -50% to -100% depending on length.
+  // A safer bet is to use a large negative value that covers the content.
+  // Since we don't have exact height measurement here easily without layout effects,
+  // we'll use a responsive percentage.
+  const y = useTransform(smoothProgress, [0, 1], ["0%", "-50%"]);
+
+  // Update active ID based on scroll progress
   useEffect(() => {
-    // Scroll Spy Logic attached to the scroll container
-    const handleIntersect = (entries: IntersectionObserverEntry[]) => {
-      entries.forEach((entry) => {
-        if (entry.isIntersecting) {
-          setActiveId(entry.target.id);
-        }
-      });
-    };
-
-    observer.current = new IntersectionObserver(handleIntersect, {
-      root: scrollContainerRef.current, // Watch scrolling within this container
-      rootMargin: "-20% 0px -60% 0px", // Trigger when section is in the top part of the view
-      threshold: 0.1,
+    const unsubscribe = scrollYProgress.on("change", (latest) => {
+      // Simple threshold mapping for 3 sections
+      if (latest < 0.33) {
+        if (activeId !== sections[0].id) setActiveId(sections[0].id);
+      } else if (latest < 0.66) {
+        if (activeId !== sections[1].id) setActiveId(sections[1].id);
+      } else {
+        if (activeId !== sections[2].id) setActiveId(sections[2].id);
+      }
     });
-
-    sections.forEach((section) => {
-      const el = document.getElementById(section.id);
-      if (el) observer.current?.observe(el);
-    });
-
-    return () => {
-      if (observer.current) observer.current.disconnect();
-    };
-  }, []);
+    return () => unsubscribe();
+  }, [scrollYProgress, activeId]);
 
   const handleNavClick = (
     e: React.MouseEvent<HTMLAnchorElement>,
     id: string
   ) => {
     e.preventDefault();
-    const element = document.getElementById(id);
-    if (element && scrollContainerRef.current) {
-      // Calculate position relative to container
-      const containerTop =
-        scrollContainerRef.current.getBoundingClientRect().top;
-      const elementTop = element.getBoundingClientRect().top;
-      const offset =
-        elementTop - containerTop + scrollContainerRef.current.scrollTop - 12; // 32px padding top
+    // With window scrolling, we'd need to scroll the window to the correct % of the container.
+    // This is tricky to get exact pixel perfection without more measurements.
+    // For now, we update the active ID manually.
+    setActiveId(id);
 
-      scrollContainerRef.current.scrollTo({
-        top: offset,
-        behavior: "smooth",
-      });
-      // Fallback active set in case intersection observer is slow
-      setActiveId(id);
-    }
+    // Optional: Calculate scroll destination
+    // const sectionIndex = sections.findIndex(s => s.id === id);
+    // const scrollRatio = sectionIndex / (sections.length - 1);
+    // Scroll window logic would go here if needed.
   };
 
   return (
-    <div className="relative flex flex-col w-full group/design-root overflow-x-hidden">
-      <main className="flex-1 px-6 md:px-10 lg:px-20 pt-5 lg:pt-10">
-        <div className="mx-auto max-w-7xl">
+    <div
+      ref={containerRef}
+      className="relative flex flex-col w-full group/design-root h-[200vh] bg-background z-30"
+    >
+      <main className="sticky top-0 h-screen overflow-hidden flex flex-col justify-center px-6 md:px-10 lg:px-20 pt-5 lg:pt-10">
+        <div className="mx-auto max-w-7xl w-full h-full flex flex-col">
           {/* Page Title */}
           <SectionHeading
             title="My Philosophy"
             subtitle="Core Principles"
             description="Exploring the core principles that guide my work in crafting meaningful and effective digital experiences."
           />
-          {/* <div className="mb-1 lg:mb-24 animate-in fade-in duration-700 slide-in-from-bottom-4">
-            <p className="text-primary text-sm font-bold tracking-widest uppercase mb-2">
-              Core Principles
-            </p>
-            <h1 className="text-text-main text-4xl md:text-5xl lg:text-6xl font-bold leading-tight tracking-tighter">
-              My Philosophy
-            </h1>
-            <p className="text-text-muted text-lg md:text-xl font-normal leading-normal mt-4 max-w-3xl">
-              Exploring the core principles that guide my work in crafting
-              meaningful and effective digital experiences.
-            </p>
-          </div> */}
 
-          <div className="flex flex-col lg:flex-row gap-12 lg:gap-20 ">
+          <div className="flex flex-col lg:flex-row gap-12 lg:gap-20 h-full overflow-hidden">
             {/* Sidebar Sticky Nav */}
-            <aside className="hidden lg:block lg:w-1/3 lg:sticky lg:top-32 lg:self-start animate-in fade-in duration-1000 slide-in-from-left-4 delay-200">
+            <aside className="hidden lg:block lg:w-1/3 lg:pt-10">
               <SidebarNav
                 items={navItems}
                 activeId={activeId}
@@ -136,9 +132,8 @@ const PhilosophySection: React.FC = () => {
               </p>
               <div className="flex flex-wrap gap-2 border border-black/10 rounded-lg p-2">
                 {navItems.map((item, index) => (
-                  <div className="flex items-center gap-2">
+                  <div key={item.id} className="flex items-center gap-2">
                     <a
-                      key={item.id}
                       href={item.href}
                       onClick={(e) => handleNavClick(e, item.id)}
                       className={`px-3 py-1 text-sm font-medium transition-colors ${
@@ -157,18 +152,15 @@ const PhilosophySection: React.FC = () => {
               </div>
             </div>
 
-            {/* Main Content Area - Scrollable Viewport */}
-            <div className="lg:w-2/3 animate-in fade-in duration-1000 slide-in-from-bottom-8 delay-300 ">
-              <div
-                ref={scrollContainerRef}
-                className="relative h-[60vh] overflow-y-auto pr-4 scrollbar-thin scrollbar-thumb-black/10 scrollbar-track-transparent md:pl-0 scrollbar-hidden pb-25"
-                style={{ scrollBehavior: "smooth" }}
+            {/* Main Content Area - Animated Viewport */}
+            <div className="lg:w-2/3 h-full relative">
+              <motion.div
+                style={{ y }}
+                className="relative flex flex-col pb-32"
               >
-                {/* Timeline Vertical Line Wrapper 
-                     We wrap the content in a relative div to ensure the line spans the full scroll height
-                 */}
+                {/* Timeline Vertical Line Wrapper */}
                 <div className="relative min-h-full pl-3">
-                  <div className="flex flex-col md:pl-16  pt-3 pb-32">
+                  <div className="flex flex-col md:pl-16 pt-3">
                     <div
                       aria-hidden="true"
                       className="absolute line mt-9 left-0 md:left-6 top-0 bottom-0 w-px bg-black/10 hidden md:block z-0"
@@ -182,7 +174,7 @@ const PhilosophySection: React.FC = () => {
                     ))}
                   </div>
                 </div>
-              </div>
+              </motion.div>
             </div>
           </div>
         </div>

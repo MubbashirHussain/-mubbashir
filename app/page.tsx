@@ -77,8 +77,8 @@ export default function Home() {
       <div className="bg-primary" ref={heroRef}>
         <HeroSection />
       </div>
-      <Container className="h-screen font-space-grotesk">
-        <div className="sec-2-main h-screen">
+      <Container className="font-space-grotesk">
+        <div className="sec-2-main">
           <PhilosophySection />
         </div>
       </Container>
