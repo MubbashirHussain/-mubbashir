@@ -2,6 +2,7 @@ import React, { useEffect, useState, useRef } from "react";
 import SidebarNav, { NavItem } from "./SideBar";
 import ContentSection, { SectionData } from "./ContentSection";
 import { Code, Hand, PencilRuler } from "lucide-react";
+import SectionHeading from "@/components/ui/sectionHeading";
 
 // Data Definition
 const sections: SectionData[] = [
@@ -100,7 +101,12 @@ const PhilosophySection: React.FC = () => {
       <main className="flex-1 px-6 md:px-10 lg:px-20 pt-5 lg:pt-10">
         <div className="mx-auto max-w-7xl">
           {/* Page Title */}
-          <div className="mb-1 lg:mb-24 animate-in fade-in duration-700 slide-in-from-bottom-4">
+          <SectionHeading
+            title="My Philosophy"
+            subtitle="Core Principles"
+            description="Exploring the core principles that guide my work in crafting meaningful and effective digital experiences."
+          />
+          {/* <div className="mb-1 lg:mb-24 animate-in fade-in duration-700 slide-in-from-bottom-4">
             <p className="text-primary text-sm font-bold tracking-widest uppercase mb-2">
               Core Principles
             </p>
@@ -111,7 +117,7 @@ const PhilosophySection: React.FC = () => {
               Exploring the core principles that guide my work in crafting
               meaningful and effective digital experiences.
             </p>
-          </div>
+          </div> */}
 
           <div className="flex flex-col lg:flex-row gap-12 lg:gap-20 ">
             {/* Sidebar Sticky Nav */}
