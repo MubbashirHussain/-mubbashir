@@ -39,7 +39,7 @@ export default function HeroSection() {
     ChargingPercentage: number;
   }>({
     isCharging: false,
-    ChargingPercentage: 0,
+    ChargingPercentage: 82,
   });
   const onClickChargeHandle = () => {
     if (!isCharging) {
@@ -48,7 +48,7 @@ export default function HeroSection() {
     }
     setIsCharging((prev) => ({
       isCharging: !prev.isCharging,
-      ChargingPercentage: prev.isCharging ? 62 : 100,
+      ChargingPercentage: prev.isCharging ? 82 : 100,
     }));
   };
 
@@ -295,7 +295,7 @@ export default function HeroSection() {
             {/* Profile Image with Tilt Effect */}
             <div ref={profileRef} className="z-10">
               <ProfileImage
-                imageSrc="/hero-person.png"
+                imageSrc="/images/hero-person.png"
                 imageAlt="Mubbashir Portrait"
                 frameBgClassName="bg-primary"
                 grayscale={true}
