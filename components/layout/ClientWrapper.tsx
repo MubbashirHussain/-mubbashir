@@ -10,7 +10,7 @@ export default function ClientWrapper({
 }) {
   const [isLoaded, setIsLoaded] = useState(false);
 
-  // return children;
+  return children;
   return (
     <>
       {!isLoaded ? (

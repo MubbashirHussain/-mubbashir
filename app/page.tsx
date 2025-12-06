@@ -11,6 +11,7 @@ import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { useRef } from "react";
 import { useEffect } from "react";
+import SpreaterLine from "@/components/animations/spreaterLine";
 export default function Home() {
   const headerRef = useRef<HTMLDivElement>(null);
   const mainRef = useRef<HTMLDivElement>(null);
@@ -87,6 +88,7 @@ export default function Home() {
           </div>
         </Container>
       </div>
+      <SpreaterLine title="Projects" />
       <div className="relative z-30 bg-background shadow-[0_50px_80px_-40px_rgba(0,0,0,0.3)] mb-[100vh]">
         <div className="projects relative">
           <ProjectsSection />

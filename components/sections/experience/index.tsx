@@ -110,7 +110,8 @@ const ExperienceItem = ({ exp }: { exp: (typeof experiences)[0] }) => {
                     </li>
                   ))}
                 </ul>
-                <div className="absolute left-[15%] bottom-4 flex flex-wrap gap-2 w-0 group-hover:w-auto opacity-0 group-hover:opacity-100 transition-opacity duration-500 delay-800">
+                <div className="absolute left-[15%] bottom-4 flex flex-wrap gap-2 w-0 group-hover:w-auto opacity-0 group-hover:opacity-100
+                                group-hover:transition-opacity group-hover:duration-500 group-hover:delay-700 group-hover:ease-out">
                   {exp.tech.map((t) => (
                     <span
                       key={t}
