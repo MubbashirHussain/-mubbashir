@@ -75,16 +75,22 @@ export default function Home() {
         style={{ position: "fixed" }} // Ensure it's fixed as per SideTab default, but we might need to override if SideTab sets it. SideTab sets fixed.
       />
 
-      <div className="bg-primary" ref={heroRef}>
-        <HeroSection />
+      <div className="bg-primary sticky top-0 z-30" ref={heroRef}>
+        <Container className="h-screen bg-background relative max-h-[1020px]">
+          <HeroSection />
+        </Container>
       </div>
-      <Container className="font-space-grotesk">
-        <div className="sec-2-main">
-          <PhilosophySection />
+      <div className="bg-background relative z-30">
+        <Container className="font-space-grotesk">
+          <div className="sec-2-main">
+            <PhilosophySection />
+          </div>
+        </Container>
+      </div>
+      <div className="relative z-30 bg-background shadow-[0_50px_80px_-40px_rgba(0,0,0,0.3)] mb-[100vh]">
+        <div className="projects relative">
+          <ProjectsSection />
         </div>
-      </Container>
-      <div className="projects relative ">
-        <ProjectsSection />
       </div>
       <ExperienceSection />
     </main>

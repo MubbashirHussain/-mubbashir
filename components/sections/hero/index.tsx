@@ -42,7 +42,7 @@ export default function HeroSection() {
     ChargingPercentage: 82,
   });
   const onClickChargeHandle = () => {
-    if (!isCharging) {
+    if (!isCharging.isCharging) {
       const audio = new Audio("/chargeSound.mp3");
       audio.play();
     }
@@ -142,171 +142,140 @@ export default function HeroSection() {
   ];
 
   return (
-    <div>
-      {/* Hero Section */}
-      <Container className="h-screen bg-background relative max-h-[1020px]">
-        <div className="grid grid-cols-12 gap-5 h-full" ref={containerRef}>
-          {/* Left Column - Hero Content */}
-          <div
-            ref={parentRef}
-            className="col-span-7 justify-start flex items-center"
-          >
-            <div className="w-full">
-              <HeroLeftSection
-                name="Mubbashir"
-                description="I'm a digital designer and developer crafting nurturing digital environments. Like a peaceful sanctuary in the city, I build interfaces that are both invigorating and accessible, suitable for all users."
-                ctaText="Get in touch"
-                onCtaClick={() => console.log("CTA clicked")}
-                showOpenToWork={true}
-              />
-            </div>
-          </div>
+    <div className="grid grid-cols-12 gap-5 h-full" ref={containerRef}>
+      {/* Left Column - Hero Content */}
+      <div
+        ref={parentRef}
+        className="col-span-7 justify-start flex items-center"
+      >
+        <div className="w-full">
+          <HeroLeftSection
+            name="Mubbashir"
+            description="I'm a digital designer and developer crafting nurturing digital environments. Like a peaceful sanctuary in the city, I build interfaces that are both invigorating and accessible, suitable for all users."
+            ctaText="Get in touch"
+            onCtaClick={() => console.log("CTA clicked")}
+            showOpenToWork={true}
+          />
+        </div>
+      </div>
 
-          {/* Decorative Side Tab */}
+      {/* Decorative Side Tab */}
+      <SideTab
+        bottom="29%"
+        left="0%"
+        bgClassName="bg-primary"
+        eachCorner={{
+          br: { enabled: false },
+          tr: { enabled: false },
+          bl: { enabled: true },
+          tl: { enabled: false },
+        }}
+        side="left"
+        height="1%"
+        cornerSize={40}
+      />
+
+      {/* Bottom Image Gallery */}
+      <ImageGallery
+        ref={galleryRef}
+        imageCount={3}
+        bgClassName="bg-primary"
+        borderRadius="60px"
+        width="50%"
+        height="30%"
+        position={{ bottom: "0", left: "0" }}
+        className="pointer-events-auto"
+      />
+
+      {/* Spacer */}
+      <div className="col-span-1"></div>
+      {/* Right Column - Profile Image */}
+      <div className="col-span-4 flex flex-col ">
+        <div
+          className="bg-secondary flex justify-between items-center p-2 px-3 w-[80%] my-3 rounded-full h-[60px]  self-baseline-last"
+          ref={batteryRef}
+        >
+          <BatteryIcon
+            className="ms-2"
+            showCharging={isCharging.isCharging}
+            batteryPercentage={isCharging.ChargingPercentage}
+            bgColor=""
+            tipColor="bg-white"
+            strokeColor="border-white"
+            fillColor="bg-white"
+            textColor="text-white"
+          />
+          <div
+            onClick={onClickChargeHandle}
+            className="group flex h-10 items-center border border-white rounded-full p-2 transition-all duration-300 hover:bg-white hover:text-secondary text-white cursor-pointer hover:pr-4"
+          >
+            <div className="w-6 h-6 flex items-center justify-center">
+              <Charge className="w-5 h-5" />
+            </div>
+            <span className="max-w-0 overflow-hidden opacity-0 group-hover:max-w-xs group-hover:opacity-100 group-hover:ml-2 transition-all duration-300 ease-in-out whitespace-nowrap text-sm font-medium">
+              {isCharging.isCharging ? "Unplug" : "Plug In"}
+            </span>
+          </div>
+        </div>
+
+        {/* Background Shape */}
+        <div
+          ref={shapeRef}
+          className={`h-[80%] w-[43%] right-0 bg-primary absolute top-[10%]`}
+          style={{
+            borderRadius: toPxContainer("5%"),
+          }}
+        />
+
+        {/* Decorative Side Tabs */}
+        <div
+          ref={rightSideTab1Ref}
+          className="absolute inset-0 pointer-events-none"
+        >
           <SideTab
-            bottom="29%"
-            left="0%"
+            top="10%"
+            right="0%"
+            bgClassName="bg-primary"
+            eachCorner={{
+              br: { enabled: true },
+              tr: { enabled: false },
+              bl: { enabled: false },
+              tl: { enabled: false },
+            }}
+            side="right"
+            cornerSize={40}
+          />
+        </div>
+        <div
+          ref={rightSideTab2Ref}
+          className="absolute inset-0 pointer-events-none"
+        >
+          <SideTab
+            bottom="10%"
+            right="0%"
             bgClassName="bg-primary"
             eachCorner={{
               br: { enabled: false },
-              tr: { enabled: false },
-              bl: { enabled: true },
+              tr: { enabled: true },
+              bl: { enabled: false },
               tl: { enabled: false },
             }}
-            side="left"
-            height="1%"
-            cornerSize={40}
+            side="right"
+            cornerSize={100}
           />
-
-          <SideTab
-            // top=""
-            ref={scrollTabRef}
-            bottom="0%"
-            left="25%"
-            className={`-left-[50%] -translate-x-1/2 flex z-20 items-center justify-center pointer-events-auto`}
-            color={"bg-secondary"}
-            bgClassName="bg-background"
-            eachCorner={{
-              br: { enabled: true, backgroundColor: "bg-background" },
-              tr: { enabled: false },
-              bl: { enabled: true, backgroundColor: "bg-background" },
-              tl: { enabled: false },
-            }}
-            radius={"30px"}
-            side="bottom"
-            height={"6%"}
-            width={"20%"}
-            cornerSize={30}
-          >
-            <span className="text-secondary animate-bounce flex gap-3 justify-center items-center">
-              Scroll <ArrowDown size={20} />
-            </span>
-          </SideTab>
-          {/* Bottom Image Gallery */}
-          <ImageGallery
-            ref={galleryRef}
-            imageCount={3}
-            bgClassName="bg-primary"
-            borderRadius="60px"
-            width="50%"
-            height="30%"
-            position={{ bottom: "0", left: "0" }}
-            className="pointer-events-auto"
-          />
-
-          {/* Spacer */}
-          <div className="col-span-1"></div>
-          {/* Right Column - Profile Image */}
-          <div className="col-span-4 flex flex-col ">
-            <div
-              className="bg-secondary flex justify-between items-center p-2 px-3 w-[80%] my-3 rounded-full h-[60px]  self-baseline-last"
-              ref={batteryRef}
-            >
-              <BatteryIcon
-                className="ms-2"
-                showCharging={isCharging.isCharging}
-                batteryPercentage={isCharging.ChargingPercentage}
-                bgColor=""
-                tipColor="bg-white"
-                strokeColor="border-white"
-                fillColor="bg-white"
-                textColor="text-white"
-              />
-              <div
-                onClick={onClickChargeHandle}
-                className="group flex h-10 items-center border border-white rounded-full p-2 transition-all duration-300 hover:bg-white hover:text-secondary text-white cursor-pointer hover:pr-4"
-              >
-                <div className="w-6 h-6 flex items-center justify-center">
-                  <Charge className="w-5 h-5" />
-                </div>
-                <span className="max-w-0 overflow-hidden opacity-0 group-hover:max-w-xs group-hover:opacity-100 group-hover:ml-2 transition-all duration-300 ease-in-out whitespace-nowrap text-sm font-medium">
-                  {isCharging ? "Unplug" : "Plug In"}
-                </span>
-              </div>
-            </div>
-
-            {/* Background Shape */}
-            <div
-              ref={shapeRef}
-              className={`h-[80%] w-[43%] right-0 bg-primary absolute top-[10%]`}
-              style={{
-                borderRadius: toPxContainer("5%"),
-              }}
-            />
-
-            {/* Decorative Side Tabs */}
-            <div
-              ref={rightSideTab1Ref}
-              className="absolute inset-0 pointer-events-none"
-            >
-              <SideTab
-                top="10%"
-                right="0%"
-                bgClassName="bg-primary"
-                eachCorner={{
-                  br: { enabled: true },
-                  tr: { enabled: false },
-                  bl: { enabled: false },
-                  tl: { enabled: false },
-                }}
-                side="right"
-                cornerSize={40}
-              />
-            </div>
-            <div
-              ref={rightSideTab2Ref}
-              className="absolute inset-0 pointer-events-none"
-            >
-              <SideTab
-                bottom="10%"
-                right="0%"
-                bgClassName="bg-primary"
-                eachCorner={{
-                  br: { enabled: false },
-                  tr: { enabled: true },
-                  bl: { enabled: false },
-                  tl: { enabled: false },
-                }}
-                side="right"
-                cornerSize={100}
-              />
-            </div>
-
-            {/* Profile Image with Tilt Effect */}
-            <div ref={profileRef} className="z-10">
-              <ProfileImage
-                imageSrc="/images/hero-person.png"
-                imageAlt="Mubbashir Portrait"
-                frameBgClassName="bg-primary"
-                grayscale={true}
-                floatingIcons={floatingIcons}
-              />
-            </div>
-          </div>
         </div>
-      </Container>
 
-      {/* Additional Sections */}
+        {/* Profile Image with Tilt Effect */}
+        <div ref={profileRef} className="z-10">
+          <ProfileImage
+            imageSrc="/images/hero-person.png"
+            imageAlt="Mubbashir Portrait"
+            frameBgClassName="bg-primary"
+            grayscale={true}
+            floatingIcons={floatingIcons}
+          />
+        </div>
+      </div>
     </div>
   );
 }

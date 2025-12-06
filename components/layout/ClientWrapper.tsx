@@ -10,13 +10,16 @@ export default function ClientWrapper({
 }) {
   const [isLoaded, setIsLoaded] = useState(false);
 
-  return children;
+  // return children;
   return (
     <>
-      <div className="h-screen w-screen relative">
-        <Preloader onFinish={() => setIsLoaded(true)} isShown={!isLoaded} />
-        {isLoaded ? children : null}
-      </div>
+      {!isLoaded ? (
+        <div className="h-screen w-screen relative">
+          <Preloader onFinish={() => setIsLoaded(true)} isShown={!isLoaded} />
+        </div>
+      ) : (
+        children
+      )}
     </>
   );
 }

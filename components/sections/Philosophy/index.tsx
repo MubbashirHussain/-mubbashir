@@ -2,8 +2,9 @@ import React, { useEffect, useState, useRef } from "react";
 import { useScroll, useTransform, useSpring, motion } from "framer-motion";
 import SidebarNav, { NavItem } from "./SideBar";
 import ContentSection, { SectionData } from "./ContentSection";
-import { Code, Hand, PencilRuler } from "lucide-react";
+import { ArrowDown, Code, Hand, PencilRuler } from "lucide-react";
 import SectionHeading from "@/components/ui/sectionHeading";
+import { SideTab } from "@/components/ui/side-tab";
 
 // Data Definition
 const sections: SectionData[] = [
@@ -106,6 +107,30 @@ const PhilosophySection: React.FC = () => {
       ref={containerRef}
       className="relative flex flex-col w-full group/design-root h-[200vh] bg-background z-30"
     >
+      <SideTab
+        // top=""
+        // ref={scrollTabRef}
+        top="-60px"
+        left="25%"
+        className={`-left-[50%] -translate-x-1/2 flex z-20 items-center justify-center pointer-events-auto`}
+        color={"bg-secondary"}
+        bgClassName="bg-background"
+        eachCorner={{
+          br: { enabled: true, backgroundColor: "bg-background" },
+          tr: { enabled: false },
+          bl: { enabled: true, backgroundColor: "bg-background" },
+          tl: { enabled: false },
+        }}
+        radius={"30px"}
+        side="bottom"
+        height={"60px"}
+        width={"20%"}
+        cornerSize={30}
+      >
+        <span className="text-secondary animate-bounce flex gap-3 justify-center items-center">
+          Scroll <ArrowDown size={20} />
+        </span>
+      </SideTab>
       <main className="sticky top-0 h-screen overflow-hidden flex flex-col justify-center px-6 md:px-10 lg:px-20 pt-5 lg:pt-10">
         <div className="mx-auto max-w-7xl w-full h-full flex flex-col">
           {/* Page Title */}
