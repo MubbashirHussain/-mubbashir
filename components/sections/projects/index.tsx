@@ -70,7 +70,7 @@ export default function ProjectsSection() {
         fill
         className="object-cover"
       /> */}
-      <div className="sticky top-0 h-screen overflow-hidden">
+      <div className="project_bg sticky top-0 h-screen overflow-hidden">
         <div className="absolute top-10 left-0 w-full z-10">
           <Container className="px-6 md:px-10 lg:px-20">
             <SectionHeading
@@ -84,6 +84,15 @@ export default function ProjectsSection() {
           <HorizontalCards scrollYProgress={scrollYProgress} />
         </div>
       </div>
+      <style>
+        {`
+          .project_bg {
+            background-image: url('/images/project-bg.png');
+            background-size: cover;
+            background-position: center;
+          }
+        `}
+      </style>
     </section>
   );
 }
@@ -149,7 +158,7 @@ function CardWrapper({
   const opacity = useTransform(
     x,
     [center - 2 * stride, center, center + 2 * stride],
-    [0.6, 1, 0.6]
+    [1, 1, 1]
   );
 
   const zIndex = useTransform(
@@ -158,9 +167,14 @@ function CardWrapper({
     [1, 5, 1]
   );
 
+  const rotate = useTransform(
+    x,
+    [center - 2 * stride, center, center + 2 * stride],
+    [5, 10, 5]
+  );
   return (
     <motion.div
-      style={{ scale, zIndex, opacity }}
+      style={{ scale, zIndex, opacity, rotate }}
       className="relative shrink-0"
     >
       <ProjectCard {...project} />

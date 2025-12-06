@@ -4,6 +4,7 @@ import { Header } from "@/components/layout/header";
 import HeroSection from "@/components/sections/hero";
 import PhilosophySection from "@/components/sections/Philosophy";
 import ProjectsSection from "@/components/sections/projects";
+import ExperienceSection from "@/components/sections/experience";
 import { Container } from "@/components/ui/container";
 import Terminal from "@/components/ui/terminal";
 import gsap from "gsap";
@@ -85,6 +86,7 @@ export default function Home() {
       <div className="projects relative ">
         <ProjectsSection />
       </div>
+      <ExperienceSection />
     </main>
   );
 }
