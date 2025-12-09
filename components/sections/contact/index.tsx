@@ -2,10 +2,13 @@
 
 import { Container } from "@/components/ui/container";
 import { InteractiveHoverButton } from "@/components/ui/interactive-hover-button";
-import { Github, Linkedin, Twitter } from "lucide-react";
+import { Github, Linkedin, Twitter, MapPin, Mail } from "lucide-react";
 import Link from "next/link";
 import { useEffect, useRef, useState } from "react";
 import { motion, useScroll, useTransform } from "framer-motion";
+import Image from "next/image";
+
+import { InteractiveContactCard } from "@/components/ui/interactive-card";
 
 export default function ContactSection() {
   const containerRef = useRef<HTMLDivElement>(null);
@@ -28,9 +31,11 @@ export default function ContactSection() {
               style={{ y }}
               className="text-5xl md:text-7xl lg:text-9xl font-bold tracking-tighter hover:text-primary transition-colors duration-500 cursor-default"
             >
-              Let's create <br />
-              <span className="text-primary italic">something</span> <br />
-              together.
+              <InteractiveContactCard>
+                Let's create <br />
+                <span className="text-primary italic">something</span> <br />
+                together
+              </InteractiveContactCard>
             </motion.h2>
 
             <div className="flex flex-col gap-2 mt-8">
@@ -44,7 +49,6 @@ export default function ContactSection() {
               <Link href="mailto:hello@mubbashir.dev">
                 <InteractiveHoverButton
                   text="Drop me an email"
-
                   className="w-fit px-10 py-4 text-lg border-secondary-500 bg-background text-secondary hover:bg-primary hover:text-secondary hover:border-primary cursor-navigation"
                 />
               </Link>
