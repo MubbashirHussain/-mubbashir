@@ -79,9 +79,9 @@ function ParallaxText({ children, baseVelocity = 100 }: ParallaxProps) {
   );
 }
 
-export default function SpreaterLine({ title }: { title: string }) {
+export default function SpreaterLine({ title , className }: { title: string , className?: string }) {
   return (
-    <section className="bg-secondary relative z-30 py-4 w-full overflow-hidden">
+    <section className={`bg-secondary relative z-30 py-4 w-full overflow-hidden ${className}`}>
       <ParallaxText baseVelocity={2}>
         <div className="flex items-center gap-4">
           <h1 className="text-primary uppercase text-3xl font-space-grotesk font-bold">

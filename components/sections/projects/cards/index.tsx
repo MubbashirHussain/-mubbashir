@@ -13,7 +13,7 @@ export default function ProjectCard({
 }) {
   return (
     <div
-      className={`relative group/card bg-secondary-100 max-w-[320px] h-[300px] min-h-[250px] min-w-[250px] w-full rounded-2xl flex items-end overflow-hidden transition-all duration-400
+      className={`relative group/card bg-secondary-100 max-w-[320px] h-[300px] min-h-[250px] min-w-[250px] w-full rounded-2xl flex items-end overflow-hidden transition-all duration-400 cursor-navigation
         ${className}`}
     >
       <Image

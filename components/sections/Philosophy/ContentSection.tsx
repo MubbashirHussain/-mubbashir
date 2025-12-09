@@ -39,7 +39,7 @@ const ContentSection: React.FC<ContentSectionProps> = ({ data, isActive }) => {
               isActive
                 ? "bg-primary-100 border-primary-300 text-text-main scale-110"
                 : "bg-secondary border-secondary-100 text-text-muted md:bg-secondary-50"
-            }
+            } cursor-button
         `}
         >
           <span

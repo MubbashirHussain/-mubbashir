@@ -263,7 +263,7 @@ export const NodeFlowApp = () => {
             {/* Control Panel */}
             <div className="prompt-input flex absolute bottom-30 rounded-xl items-center justify-between p-2 border border-gray-300 min-w-md bg-background shadow-lg">
               <div className="flex items-center gap-3">
-                <div className="bg-gray-100 p-2 rounded-full border border-gray-200 cursor-pointer">
+                <div className="bg-gray-100 p-2 rounded-full border border-gray-200">
                   <Plus className="text-text" />
                 </div>
                 <div className="w-[2px] bg-gray-200 h-8 rounded-full" />
@@ -340,7 +340,7 @@ export const NodeFlowApp = () => {
                 id="ai-node-1"
                 position={NodesPosition[0]?.positions}
                 className={
-                  "bg-background shadow-none border rounded-2xl border-gray-300 w-fit opacity-0"
+                  "bg-background shadow-none border rounded-2xl border-gray-300 w-fit opacity-0 cursor-grab"
                 }
                 // onMouseDown={handleMouseDown}
               >
@@ -381,7 +381,7 @@ export const NodeFlowApp = () => {
                 id="ai-node-2"
                 position={NodesPosition[1]?.positions}
                 className={
-                  "bg-background shadow-none border rounded-2xl border-gray-300 w-fit  opacity-0"
+                  "bg-background shadow-none border rounded-2xl border-gray-300 w-fit  opacity-0 cursor-grab"
                 }
               >
                 <div className="flex items-center space-x-2 pb-2 border-b border-gray-200">
@@ -425,7 +425,7 @@ export const NodeFlowApp = () => {
                 id="ai-node-3"
                 position={NodesPosition[2].positions}
                 className={
-                  "bg-background shadow-none border rounded-2xl border-gray-300 w-fit  opacity-0"
+                  "bg-background shadow-none border rounded-2xl border-gray-300 w-fit  opacity-0 cursor-grab"
                 }
               >
                 <div className="flex items-center space-x-2 pb-2 border-b border-gray-200">

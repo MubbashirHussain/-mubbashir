@@ -71,7 +71,7 @@ const ExperienceItem = ({ exp }: { exp: (typeof experiences)[0] }) => {
     <div
       onMouseMove={handleMouseMove}
       onMouseLeave={handleMouseLeave}
-      className="group md:px-8 relative border-b border-secondary-400 py-12 lg:py-16 flex flex-col md:flex-row justify-between items-start md:items-center gap-4 transition-colors hover:bg-secondary-900 px-4 -mx-4 rounded-xl cursor-default duration-800 ease-in-out"
+      className="group md:px-8 border-b  border-secondary-400 py-12 lg:py-16 flex flex-col md:flex-row justify-between items-start md:items-center gap-4 transition-colors hover:bg-secondary-900 px-4 cursor-navigation duration-800 ease-in-out max-w-[100vw]"
     >
       <div className="flex flex-col gap-2">
         <div className="flex items-center gap-2 jusZ">
@@ -110,8 +110,10 @@ const ExperienceItem = ({ exp }: { exp: (typeof experiences)[0] }) => {
                     </li>
                   ))}
                 </ul>
-                <div className="absolute left-[15%] bottom-4 flex flex-wrap gap-2 w-0 group-hover:w-auto opacity-0 group-hover:opacity-100
-                                group-hover:transition-opacity group-hover:duration-500 group-hover:delay-700 group-hover:ease-out">
+                <div
+                  className="absolute left-[15%] bottom-4 flex flex-wrap gap-2 w-0 group-hover:w-auto opacity-0 group-hover:opacity-100
+                                group-hover:transition-opacity group-hover:duration-500 group-hover:delay-700 group-hover:ease-out"
+                >
                   {exp.tech.map((t) => (
                     <span
                       key={t}
@@ -140,9 +142,9 @@ export default function ExperienceSection() {
   return (
     <section
       ref={containerRef}
-      className="fixed bottom-0 left-0 w-full h-screen z-10 bg-background py-20 lg:py-32 flex flex-col justify-center"
+      className="relative w-full min-h-screen bg-background py-20 lg:py-32 flex flex-col justify-center max-w-[100vw]"
     >
-      <Container className="w-full max-w-full">
+      <Container className="w-full max-w-full max-w-[100vw]">
         <div className="mb-20">
           <SectionHeading
             title="Experience"

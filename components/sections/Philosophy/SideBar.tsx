@@ -27,7 +27,7 @@ const SidebarNav: React.FC<SidebarNavProps> = ({
             href={item.href}
             onClick={(e) => onLinkClick(e, item.id)}
             className={`
-              group flex items-center gap-4 px-4 py-3 rounded-lg transition-all duration-300 ease-in-out cursor-pointer
+              group flex items-center gap-4 px-4 py-3 rounded-lg transition-all duration-300 ease-in-out cursor-navigation
               ${
                 isActive
                   ? "bg-primary-100  border border-primary-300 translate-x-2 lg:translate-x-0"
@@ -38,11 +38,7 @@ const SidebarNav: React.FC<SidebarNavProps> = ({
             <span
               className={`
                 material-symbols-outlined text-2xl transition-colors duration-300
-                ${
-                  isActive
-                    ? "text-text-main"
-                    : "text-text-muted"
-                }
+                ${isActive ? "text-text-main" : "text-text-muted"}
               `}
             >
               {item.iconName}

@@ -1,6 +1,7 @@
 import { useEffect, useRef } from "react";
-import { ArrowUpRight } from "lucide-react";
+
 import { SideTab } from "@/components/ui/side-tab";
+import { InteractiveHoverButton } from "@/components/ui/interactive-hover-button";
 import { getColorStyle } from "@/lib/color-utils";
 import gsap from "gsap";
 
@@ -50,7 +51,6 @@ export const HeroLeftSection = ({
   className = "",
 }: HeroLeftSectionProps) => {
   const accentStyle = getColorStyle(accentColor, "text");
-  const bgStyle = getColorStyle(accentColor, "bg");
 
   const blobRef = useRef<HTMLDivElement>(null);
   const blobRef1 = useRef<HTMLDivElement>(null);
@@ -185,16 +185,11 @@ export const HeroLeftSection = ({
         </p>
 
         {/* CTA Button */}
-        <button
+        <InteractiveHoverButton
           onClick={onCtaClick}
-          className={`text-secondary font-bold text-lg px-8 py-4 rounded-full w-fit transition-all duration-300 shadow-sm  hover:shadow-md hover:scale-105 flex items-center gap-3 group mb-16 md:mb-24 hover:bg-secondary hover:text-primary ${
-            bgStyle.className || ""
-          }`}
-          style={bgStyle.style}
-        >
-          <span>{ctaText}</span>
-          <ArrowUpRight className="group-hover:rotate-45 transition-transform duration-300" />
-        </button>
+          text={ctaText}
+          className="w-fit px-8 py-4 mb-16 md:mb-24 text-lg cursor-navigation"
+        />
       </div>
     </div>
   );

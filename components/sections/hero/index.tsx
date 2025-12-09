@@ -207,7 +207,7 @@ export default function HeroSection() {
           />
           <div
             onClick={onClickChargeHandle}
-            className="group flex h-10 items-center border border-white rounded-full p-2 transition-all duration-300 hover:bg-white hover:text-secondary text-white cursor-pointer hover:pr-4"
+            className="group flex h-10 items-center border border-white rounded-full p-2 transition-all duration-300 hover:bg-white hover:text-secondary text-white  hover:pr-4"
           >
             <div className="w-6 h-6 flex items-center justify-center">
               <Charge className="w-5 h-5" />
