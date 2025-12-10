@@ -144,7 +144,7 @@ export default function ExperienceSection() {
       ref={containerRef}
       className="relative w-full min-h-screen bg-background py-20 lg:py-32 flex flex-col justify-center max-w-[100vw]"
     >
-      <Container className="w-full max-w-full max-w-[100vw]">
+      <Container className="w-full max-w-[100vw]">
         <div className="mb-20">
           <SectionHeading
             title="Experience"

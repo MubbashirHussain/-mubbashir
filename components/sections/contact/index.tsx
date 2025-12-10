@@ -6,7 +6,6 @@ import { Github, Linkedin, Twitter, MapPin, Mail } from "lucide-react";
 import Link from "next/link";
 import { useEffect, useRef, useState } from "react";
 import { motion, useScroll, useTransform } from "framer-motion";
-import Image from "next/image";
 
 import { InteractiveContactCard } from "@/components/ui/interactive-card";
 
