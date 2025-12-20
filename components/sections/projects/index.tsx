@@ -1,12 +1,12 @@
-"use client";
-
-import { useRef } from "react";
+import { useRef, useState, useEffect } from "react";
+import { createPortal } from "react-dom";
 import {
   useScroll,
   useTransform,
   motion,
   useSpring,
   MotionValue,
+  AnimatePresence,
 } from "framer-motion";
 import SectionHeading from "@/components/ui/sectionHeading";
 import ProjectCard from "./cards";
@@ -57,6 +57,7 @@ const GAP = 32; // gap-8 = 32px
 
 export default function ProjectsSection() {
   const containerRef = useRef<HTMLDivElement>(null);
+  const [activeIndex, setActiveIndex] = useState<number | null>(null);
   const { scrollYProgress } = useScroll({
     target: containerRef,
     offset: ["start start", "end end"],
@@ -64,12 +65,6 @@ export default function ProjectsSection() {
 
   return (
     <section ref={containerRef} className="h-[200vh] relative z-20">
-      {/* <Image
-        src="/images/sec2-bg.png"
-        alt="projects-bg"
-        fill
-        className="object-cover"
-      /> */}
       <div className="project_bg sticky top-0 h-screen overflow-hidden">
         <div className="absolute top-10 left-0 w-full z-10">
           <Container className="px-6 md:px-10 lg:px-20">
@@ -81,7 +76,11 @@ export default function ProjectsSection() {
           </Container>
         </div>
         <div className="w-full flex items-center justify-center h-full">
-          <HorizontalCards scrollYProgress={scrollYProgress} />
+          <HorizontalCards
+            scrollYProgress={scrollYProgress}
+            activeIndex={activeIndex}
+            setActiveIndex={setActiveIndex}
+          />
         </div>
       </div>
       <style>
@@ -99,12 +98,13 @@ export default function ProjectsSection() {
 
 function HorizontalCards({
   scrollYProgress,
+  activeIndex,
+  setActiveIndex,
 }: {
   scrollYProgress: MotionValue<number>;
+  activeIndex: number | null;
+  setActiveIndex: (index: number | null) => void;
 }) {
-  // Calculate total travel distance
-  // We want the last card to end up in the center.
-  // Total width of all intervals = (N-1) * Stride
   const stride = CARD_WIDTH + GAP;
   const totalWidth = (projects.length - 1) * stride;
 
@@ -122,7 +122,16 @@ function HorizontalCards({
       className="flex flex-row-reverse gap-8 absolute right-1/2 -rotate-10 top-1/2"
     >
       {projects.map((project, index) => (
-        <CardWrapper key={index} index={index} x={x} project={project} />
+        <CardWrapper
+          key={index}
+          index={index}
+          x={x}
+          project={project}
+          isActive={activeIndex === index}
+          onExpand={() => setActiveIndex(index === activeIndex ? null : index)}
+          onClose={() => setActiveIndex(null)}
+          activeIndex={activeIndex}
+        />
       ))}
     </motion.div>
   );
@@ -132,17 +141,24 @@ function CardWrapper({
   index,
   x,
   project,
+  isActive,
+  onExpand,
+  onClose,
+  activeIndex,
 }: {
   index: number;
   x: MotionValue<number>;
   project: (typeof projects)[0];
+  isActive: boolean;
+  onExpand: () => void;
+  onClose: () => void;
+  activeIndex: number | null;
 }) {
   const stride = CARD_WIDTH + GAP;
   const position = index * stride;
-  // When x = position, this card is at the center
   const center = position;
 
-  const scale = useTransform(
+  const animatedScale = useTransform(
     x,
     [
       center - 2 * stride,
@@ -153,31 +169,47 @@ function CardWrapper({
     ],
     [1, 1.2, 1.4, 1.2, 1]
   );
+  const scale = isActive ? 1 : animatedScale;
 
-  // Optional: Add opacity fade for distant cards
   const opacity = useTransform(
     x,
     [center - 2 * stride, center, center + 2 * stride],
     [1, 1, 1]
   );
 
-  const zIndex = useTransform(
+  const animatedZIndex = useTransform(
     x,
     [center - 2 * stride, center, center + 2 * stride],
     [1, 5, 1]
   );
+  const zIndex = isActive ? 100 : animatedZIndex;
 
-  const rotate = useTransform(
+  const animatedRotate = useTransform(
     x,
     [center - 2 * stride, center, center + 2 * stride],
     [5, 10, 5]
   );
+  const rotate = isActive ? 0 : animatedRotate;
+
+  const [mounted, setMounted] = useState(false);
+  useEffect(() => {
+    setMounted(true);
+  }, []);
+
   return (
     <motion.div
       style={{ scale, zIndex, opacity, rotate }}
-      className="relative shrink-0"
+      className={`relative shrink-0 w-[320px] h-[300px] ${
+        isActive ? "z-50" : ""
+      }`} // Explicit size to maintain flow
     >
-      <ProjectCard {...project} />
+      <ProjectCard
+        {...project}
+        layoutId={`project-${index}`}
+        onClick={onExpand}
+        index={index}
+        activeIndex={activeIndex}
+      />
     </motion.div>
   );
 }

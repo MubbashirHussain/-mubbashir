@@ -30,11 +30,11 @@ export default function ContactSection() {
               style={{ y }}
               className="text-5xl md:text-7xl lg:text-9xl font-bold tracking-tighter hover:text-primary transition-colors duration-500 cursor-default"
             >
-              <InteractiveContactCard>
+              {/* <InteractiveContactCard> */}
                 Let's create <br />
                 <span className="text-primary italic">something</span> <br />
-                together
-              </InteractiveContactCard>
+                together.
+              {/* </InteractiveContactCard> */}
             </motion.h2>
 
             <div className="flex flex-col gap-2 mt-8">
