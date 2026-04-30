@@ -112,7 +112,7 @@ const PhilosophySection: React.FC = () => {
         // ref={scrollTabRef}
         top="-60px"
         left="25%"
-        className={`-left-[50%] -translate-x-1/2 flex z-20 items-center justify-center pointer-events-auto`}
+        className={`hidden md:flex -left-[50%] -translate-x-1/2 z-20 items-center justify-center pointer-events-auto`}
         color={"bg-secondary"}
         bgClassName="bg-background"
         eachCorner={{

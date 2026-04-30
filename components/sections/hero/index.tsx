@@ -142,13 +142,16 @@ export default function HeroSection() {
   ];
 
   return (
-    <div className="grid grid-cols-12 gap-5 h-full" ref={containerRef}>
+    <div
+      className="grid grid-cols-1 lg:grid-cols-12 gap-5 h-full"
+      ref={containerRef}
+    >
       {/* Left Column - Hero Content */}
       <div
         ref={parentRef}
-        className="col-span-7 justify-start flex items-center"
+        className="col-span-1 lg:col-span-7 justify-start flex items-center relative z-20"
       >
-        <div className="w-full">
+        <div className="w-full pt-20 lg:pt-0">
           <HeroLeftSection
             name="Mubbashir"
             description="I'm a digital designer and developer crafting nurturing digital environments. Like a peaceful sanctuary in the city, I build interfaces that are both invigorating and accessible, suitable for all users."
@@ -173,26 +176,29 @@ export default function HeroSection() {
         side="left"
         height="1%"
         cornerSize={40}
+        className="hidden lg:block"
       />
 
       {/* Bottom Image Gallery */}
-      <ImageGallery
-        ref={galleryRef}
-        imageCount={3}
-        bgClassName="bg-primary"
-        borderRadius="60px"
-        width="50%"
-        height="30%"
-        position={{ bottom: "0", left: "0" }}
-        className="pointer-events-auto"
-      />
+      <div className="hidden lg:block">
+        <ImageGallery
+          ref={galleryRef}
+          imageCount={3}
+          bgClassName="bg-primary"
+          borderRadius="60px"
+          width="50%"
+          height="30%"
+          position={{ bottom: "0", left: "0" }}
+          className="pointer-events-auto"
+        />
+      </div>
 
       {/* Spacer */}
-      <div className="col-span-1"></div>
+      <div className="hidden lg:block lg:col-span-1"></div>
       {/* Right Column - Profile Image */}
-      <div className="col-span-4 flex flex-col ">
+      <div className="col-span-1 lg:col-span-4 flex flex-col justify-end lg:justify-start pb-10 lg:pb-0 relative">
         <div
-          className="bg-secondary flex justify-between items-center p-2 px-3 w-[80%] my-3 rounded-full h-[60px]  self-baseline-last"
+          className="bg-secondary flex justify-between items-center p-2 px-3 w-[80%] my-3 rounded-full h-[60px] self-center lg:self-baseline-last z-20"
           ref={batteryRef}
         >
           <BatteryIcon
@@ -221,7 +227,7 @@ export default function HeroSection() {
         {/* Background Shape */}
         <div
           ref={shapeRef}
-          className={`h-[80%] w-[43%] right-0 bg-primary absolute top-[10%]`}
+          className={`hidden lg:block h-[80%] w-[43%] right-0 bg-primary absolute top-[10%]`}
           style={{
             borderRadius: toPxContainer("5%"),
           }}
@@ -230,7 +236,7 @@ export default function HeroSection() {
         {/* Decorative Side Tabs */}
         <div
           ref={rightSideTab1Ref}
-          className="absolute inset-0 pointer-events-none"
+          className="absolute inset-0 pointer-events-none hidden lg:block"
         >
           <SideTab
             top="10%"
@@ -248,7 +254,7 @@ export default function HeroSection() {
         </div>
         <div
           ref={rightSideTab2Ref}
-          className="absolute inset-0 pointer-events-none"
+          className="absolute inset-0 pointer-events-none hidden lg:block"
         >
           <SideTab
             bottom="10%"
@@ -266,7 +272,10 @@ export default function HeroSection() {
         </div>
 
         {/* Profile Image with Tilt Effect */}
-        <div ref={profileRef} className="z-10">
+        <div
+          ref={profileRef}
+          className="z-10 w-full max-w-md mx-auto lg:max-w-none"
+        >
           <ProfileImage
             imageSrc="/images/hero-person.png"
             imageAlt="Mubbashir Portrait"

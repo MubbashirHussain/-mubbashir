@@ -78,7 +78,7 @@ export const ProfileImage = ({
       className={`relative flex justify-center items-center md:pt-10 h-full ${className}`}
     >
       <div
-        className="relative h-[700px] aspect-3/4 group cursor-pointer"
+        className="relative h-auto w-full md:h-[700px] md:w-auto aspect-3/4 group cursor-pointer"
         onMouseMove={handleMouseMove}
         onMouseLeave={handleMouseLeave}
         style={{ perspective: "1000px" }}

@@ -9,7 +9,7 @@ import { Container } from "@/components/ui/container";
 import Terminal from "@/components/ui/terminal";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
-import { useRef } from "react";
+import { useRef, useState } from "react";
 import { useEffect } from "react";
 import SpreaterLine from "@/components/animations/spreaterLine";
 import ContactSection from "@/components/sections/contact";
@@ -18,47 +18,77 @@ export default function Home() {
   const mainRef = useRef<HTMLDivElement>(null);
   const heroRef = useRef<HTMLDivElement>(null);
 
+  const [isMobile, setIsMobile] = useState(false);
+
   useEffect(() => {
+    // Check mobile state
+    const checkMobile = () => setIsMobile(window.innerWidth < 1024);
+    checkMobile(); // Initial check
+    window.addEventListener("resize", checkMobile);
+
     gsap.registerPlugin(ScrollTrigger);
     const header = headerRef.current;
     const main = mainRef.current;
     const hero = heroRef.current;
 
-    if (!header || !main || !hero) return;
+    if (!header || !main || !hero)
+      return () => {
+        window.removeEventListener("resize", checkMobile);
+      };
 
     const ctx = gsap.context(() => {
-      // Initial animation
-      const tl = gsap.timeline({ defaults: { ease: "power3.out" } });
-      tl.from(header, {
-        y: -100,
-        duration: 1,
-        delay: 0.4,
+      // Create a MatchMedia instance
+      const mm = gsap.matchMedia();
+
+      // Desktop setup
+      mm.add("(min-width: 1024px)", () => {
+        // Initial animation
+        const tl = gsap.timeline({ defaults: { ease: "power3.out" } });
+        tl.from(header, {
+          y: -100,
+          duration: 1,
+          delay: 0.4,
+        });
+
+        // Scroll Trigger animation
+        ScrollTrigger.create({
+          trigger: hero,
+          start: "95% top", // When 80% of hero is at top of viewport
+          onEnter: () => {
+            gsap.to(header, {
+              left: "80%",
+              xPercent: -90,
+              duration: 0.5,
+              ease: "power3.out",
+            });
+          },
+          onLeaveBack: () => {
+            gsap.to(header, {
+              left: "50%", // Reset to original center position (SideTab default is left="50%")
+              xPercent: -50, // Reset to original center transform (SideTab default is -translate-x-1/2 which is -50%)
+              duration: 0.5,
+              ease: "power3.out",
+            });
+          },
+        });
       });
 
-      // Scroll Trigger animation
-      ScrollTrigger.create({
-        trigger: hero,
-        start: "95% top", // When 80% of hero is at top of viewport
-        onEnter: () => {
-          gsap.to(header, {
-            left: "80%",
-            xPercent: -90,
-            duration: 0.5,
-            ease: "power3.out",
-          });
-        },
-        onLeaveBack: () => {
-          gsap.to(header, {
-            left: "50%", // Reset to original center position (SideTab default is left="50%")
-            xPercent: -50, // Reset to original center transform (SideTab default is -translate-x-1/2 which is -50%)
-            duration: 0.5,
-            ease: "power3.out",
-          });
-        },
+      // Mobile setup
+      mm.add("(max-width: 1023px)", () => {
+        // Ensure header is visible and positioned correctly on mobile
+        gsap.set(header, {
+          y: 0,
+          left: "50%",
+          xPercent: -50,
+          opacity: 1,
+        });
       });
     }, mainRef);
 
-    return () => ctx.revert();
+    return () => {
+      ctx.revert();
+      window.removeEventListener("resize", checkMobile);
+    };
   }, []);
   return (
     <main className="max-w-screen" ref={mainRef}>
@@ -71,13 +101,13 @@ export default function Home() {
         className=""
         bgClassName="bg-secondary"
         textClassName="text-text-inverse"
-        width="30%"
+        width={isMobile ? "90%" : "30%"}
         height="7%"
         // We'll control horizontal position via GSAP
         style={{ position: "fixed" }} // Ensure it's fixed as per SideTab default, but we might need to override if SideTab sets it. SideTab sets fixed.
       />
       <div className="bg-primary sticky top-0 z-30" ref={heroRef}>
-        <Container className="h-screen bg-background relative max-h-[1020px]">
+        <Container className="min-h-screen h-auto md:h-screen bg-background relative max-h-[1020px]">
           <HeroSection />
         </Container>
       </div>

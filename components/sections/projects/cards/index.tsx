@@ -58,7 +58,7 @@ export default function ProjectCard({
         className={
           isExpanded
             ? "absolute top-0 left-0 w-full sm:w-1/2 h-full p-8 flex flex-col justify-center gap-4 z-20"
-            : "relative w-full flex flex-col z-10 gap-1 p-4 transition-all duration-400 translate-y-[200px] group-hover/card:translate-y-0"
+            : "relative w-full flex flex-col z-10 gap-1 p-4 transition-all duration-400 translate-y-0 lg:translate-y-[200px] lg:group-hover/card:translate-y-0"
         }
       >
         <motion.h4

@@ -81,7 +81,7 @@ const ExperienceItem = ({ exp }: { exp: (typeof experiences)[0] }) => {
           >
             {exp.role}
           </h3>
-          <div className="small-card-parent w-auto relative mt-3 -ml-4">
+          <div className="small-card-parent w-auto relative mt-3 -ml-4 hidden lg:block">
             <motion.div
               style={{ x: springX, y: springY }}
               className="small-card h-3 absolute  top-0 max-w-[350px] w-3 group-hover:w-[350px] bg-background rounded-2xl border transition-all duration-900 ease-in-out
@@ -128,6 +128,31 @@ const ExperienceItem = ({ exp }: { exp: (typeof experiences)[0] }) => {
           </div>
         </div>
         <p className="text-lg md:text-xl text-text-muted">{exp.company}</p>
+
+        {/* Mobile Description */}
+        <div className="lg:hidden mt-4 space-y-4">
+          <ul className="space-y-2">
+            {exp.description.map((desc, i) => (
+              <li
+                key={i}
+                className="flex items-start gap-2 text-sm text-text-muted"
+              >
+                <span className="mt-2 w-1.5 h-1.5 rounded-full bg-secondary-500 shrink-0" />
+                {desc}
+              </li>
+            ))}
+          </ul>
+          <div className="flex flex-wrap gap-2">
+            {exp.tech.map((t) => (
+              <span
+                key={t}
+                className="px-2 py-1 text-xs font-medium uppercase tracking-wider text-text-background bg-secondary/10 rounded border border-black/5"
+              >
+                {t}
+              </span>
+            ))}
+          </div>
+        </div>
       </div>
       <div className="text-3xl md:text-4xl lg:text-5xl font-medium text-text-muted/50 group-hover:text-text-main transition-colors font-space-grotesk duration-800 ease-in-out group-hover:text-background">
         {exp.period}

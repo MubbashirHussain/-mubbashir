@@ -21,7 +21,7 @@ export default function ContactSection() {
   return (
     <section
       ref={containerRef}
-      className="relative z-30 bg-secondary text-text-inverse overflow-hidden min-h-[100vh] flex flex-col justify-center py-10 lg:py-16 "
+      className="relative z-30 bg-secondary text-text-inverse overflow-hidden min-h-screen flex flex-col justify-center py-10 lg:py-16 "
     >
       <Container>
         <div className="flex flex-col md:flex-row justify-between items-start md:items-end gap-12 lg:gap-20">
@@ -31,9 +31,9 @@ export default function ContactSection() {
               className="text-5xl md:text-7xl lg:text-9xl font-bold tracking-tighter hover:text-primary transition-colors duration-500 cursor-default"
             >
               {/* <InteractiveContactCard> */}
-                Let's create <br />
-                <span className="text-primary italic">something</span> <br />
-                together.
+              Let's create <br />
+              <span className="text-primary italic">something</span> <br />
+              together.
               {/* </InteractiveContactCard> */}
             </motion.h2>
 
@@ -54,7 +54,7 @@ export default function ContactSection() {
             </div>
           </div>
 
-          <div className="flex flex-col gap-8 items-end">
+          <div className="flex flex-col gap-8 items-start md:items-end">
             <div className="flex gap-6">
               {[
                 { icon: Github, href: "https://github.com", label: "Github" },

@@ -82,7 +82,7 @@ export const HeroLeftSection = ({
   return (
     <div className={`flex flex-col justify-start md:pr-12 ${className}`}>
       {/* Decorative Side Tabs */}
-      <div className="">
+      <div className="hidden md:block">
         <SideTab
           ref={blobRef}
           top="13.5%"

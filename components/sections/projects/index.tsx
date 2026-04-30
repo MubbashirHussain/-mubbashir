@@ -63,10 +63,32 @@ export default function ProjectsSection() {
     offset: ["start start", "end end"],
   });
 
+  const [isMobile, setIsMobile] = useState(false);
+
+  useEffect(() => {
+    const checkMobile = () => setIsMobile(window.innerWidth < 1024);
+    checkMobile();
+    window.addEventListener("resize", checkMobile);
+    return () => window.removeEventListener("resize", checkMobile);
+  }, []);
+
   return (
-    <section ref={containerRef} className="h-[200vh] relative z-20">
-      <div className="project_bg sticky top-0 h-screen overflow-hidden">
-        <div className="absolute top-10 left-0 w-full z-10">
+    <section
+      ref={containerRef}
+      className={`${isMobile ? "h-auto" : "h-[200vh]"} relative z-20`}
+    >
+      <div
+        className={`project_bg ${
+          isMobile
+            ? "relative h-auto min-h-screen pb-20"
+            : "sticky top-0 h-screen overflow-hidden"
+        }`}
+      >
+        <div
+          className={`${
+            isMobile ? "relative pt-20 mb-10" : "absolute top-10 left-0"
+          } w-full z-10`}
+        >
           <Container className="px-6 md:px-10 lg:px-20">
             <SectionHeading
               title="Projects"
@@ -76,11 +98,28 @@ export default function ProjectsSection() {
           </Container>
         </div>
         <div className="w-full flex items-center justify-center h-full">
-          <HorizontalCards
-            scrollYProgress={scrollYProgress}
-            activeIndex={activeIndex}
-            setActiveIndex={setActiveIndex}
-          />
+          {isMobile ? (
+            <div className="flex flex-col gap-6 px-4 w-full max-w-md mx-auto">
+              {projects.map((project, index) => (
+                <motion.div key={index} className="w-full h-[400px]">
+                  <ProjectCard
+                    {...project}
+                    index={index}
+                    activeIndex={activeIndex}
+                    onClick={() =>
+                      setActiveIndex(index === activeIndex ? null : index)
+                    }
+                  />
+                </motion.div>
+              ))}
+            </div>
+          ) : (
+            <HorizontalCards
+              scrollYProgress={scrollYProgress}
+              activeIndex={activeIndex}
+              setActiveIndex={setActiveIndex}
+            />
+          )}
         </div>
       </div>
       <style>
