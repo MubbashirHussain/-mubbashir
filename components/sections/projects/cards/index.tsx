@@ -3,6 +3,7 @@
 import React from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import Image from "next/image";
+import { useTheme } from "next-themes";
 import { colors } from "@/config/colors";
 
 const SPRING = {
@@ -43,6 +44,17 @@ export function ProjectCard({
   rotate?: any;
   originRect?: DOMRect | null;
 }) {
+  const { theme, systemTheme } = useTheme();
+  const [mounted, setMounted] = React.useState(false);
+
+  React.useEffect(() => {
+    setMounted(true);
+  }, []);
+
+  const currentTheme = theme === "system" ? systemTheme : theme;
+  const isDark = !mounted || currentTheme === "dark";
+  const themeColors = isDark ? colors.dark : colors.light;
+
   // Expanded positioning (only used when isExpanded)
   const vw = typeof window !== "undefined" ? window.innerWidth : 1200;
   const vh = typeof window !== "undefined" ? window.innerHeight : 800;
@@ -114,10 +126,14 @@ export function ProjectCard({
     <motion.div
       ref={!isExpanded ? cardRef : undefined}
       onClick={isExpanded ? undefined : onClick}
-      className={`overflow-hidden ${isExpanded ? "shadow-2xl  border-white/10" : "group"}`}
+      className={`overflow-hidden ${
+        isExpanded
+          ? `shadow-[0_0_50px_rgba(0,0,0,0.5)] border cursor-default! ${isDark ? "border-white/10" : "border-black/10"}`
+          : `group border cursor-navigation ${isDark ? "border-white/5 hover:border-[#bbff00]/30" : "border-black/5 hover:border-[#bbff00]/50"} transition-colors duration-500`
+      }`}
       style={{
         position: isExpanded ? "fixed" : "relative",
-        background: "#333333ee",
+        background: themeColors.background.DEFAULT,
         cursor: isExpanded ? "default" : "pointer",
         opacity: isHidden ? 0 : 1,
         pointerEvents: isHidden ? "none" : "auto",
@@ -127,7 +143,7 @@ export function ProjectCard({
         ...(isExpanded ? {} : { rotate: rotate || 0 }),
         ...(isExpandedAnim
           ? {}
-          : { width: "100%", height: "100%", borderRadius: 16 }),
+          : { width: "100%", height: "100%", borderRadius: 20 }),
       }}
       initial={expandedInitial}
       animate={expandedAnimate}
@@ -203,34 +219,53 @@ export function ProjectCard({
             exit={{ opacity: 0, transition: { duration: 0 } }}
           >
             {/* gradient for thumbnail overlay */}
-            <motion.div 
-              className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/30 to-transparent pointer-events-none"
+            <motion.div
+              className={`absolute inset-0 bg-gradient-to-t ${isDark ? "from-[#0f0f0f] via-[#0f0f0f]/50" : "from-white via-white/80"} to-transparent pointer-events-none`}
               initial={{ opacity: 0 }}
               animate={{ opacity: 1, transition: { duration: 0.8 } }}
             />
-            
-            <motion.div 
+
+            <motion.div
               className="absolute top-5 left-5 z-10"
               initial={{ y: -10, opacity: 0 }}
-              animate={{ y: 0, opacity: 1, transition: { duration: 0.5, delay: 0.4 } }}
+              animate={{
+                y: 0,
+                opacity: 1,
+                transition: { duration: 0.5, delay: 0.4 },
+              }}
             >
               <span
-                className="text-[10px] font-semibold uppercase tracking-widest px-3 py-1 rounded-full backdrop-blur-sm"
-                style={{ background: "#00000044", color: "#ffffff" }}
+                className={`text-[10px] font-bold uppercase tracking-widest px-4 py-1.5 rounded-full backdrop-blur-md shadow-lg ${!isDark && "border border-black/5"}`}
+                style={{
+                  background: isDark
+                    ? `${themeColors.primary.DEFAULT}E6`
+                    : `${themeColors.primary.DEFAULT}F2`,
+                  color: isDark
+                    ? themeColors.background.DEFAULT
+                    : themeColors.text.DEFAULT,
+                }}
               >
                 {tag}
               </span>
             </motion.div>
 
-            <motion.div 
+            <motion.div
               className="absolute bottom-0 left-0 right-0 p-6 z-10"
               initial={{ y: 20, opacity: 0 }}
-              animate={{ y: 0, opacity: 1, transition: { duration: 0.6, delay: 0.3 } }}
+              animate={{
+                y: 0,
+                opacity: 1,
+                transition: { duration: 0.6, delay: 0.3 },
+              }}
             >
-              <h3 className="font-bold text-white text-xl mb-1 leading-tight">
+              <h3
+                className={`font-bold text-2xl mb-2 leading-tight tracking-tight ${isDark ? "text-white" : "text-gray-900"}`}
+              >
                 {title}
               </h3>
-              <p className="text-white/60 text-sm line-clamp-2 leading-relaxed">
+              <p
+                className={`text-sm line-clamp-2 leading-relaxed ${isDark ? "text-gray-400" : "text-gray-600"}`}
+              >
                 {description}
               </p>
             </motion.div>
@@ -243,7 +278,7 @@ export function ProjectCard({
         {isExpanded && !isClosing && (
           <motion.div
             key="expanded"
-            className="absolute inset-y-0 left-0 w-[40%] p-10 flex flex-col justify-center overflow-hidden "
+            className={`absolute inset-y-0 left-0 w-[40%] p-12 flex flex-col justify-center overflow-hidden bg-gradient-to-r ${isDark ? "from-[#0f0f0f] via-[#0f0f0f]" : "from-white via-white"} to-transparent z-10`}
             initial={{ opacity: 0, x: -40, width: "0%" }}
             animate={{
               opacity: 1,
@@ -257,7 +292,7 @@ export function ProjectCard({
                   type: "spring",
                   delay: 1,
                 },
-              }, //  side content animations
+              },
             }}
             exit={{
               opacity: 0,
@@ -266,46 +301,64 @@ export function ProjectCard({
               transition: { duration: 0.6, delay: 0, ease: "easeInOut" },
             }}
           >
-            <span
-              className="text-xs font-semibold uppercase tracking-widest px-4 py-2 rounded-full w-fit mb-6"
-              style={{ background: `$ffffff22`, color: "#ffffff99" }}
-            >
-              {tag}
-            </span>
-            <h3 className="font-bold text-white text-4xl mb-4 leading-tight">
-              {title}
-            </h3>
-            <p className="text-white/70 text-lg mb-8 leading-relaxed">
-              {description}
-            </p>
-
-            {/* Mock Tech Stack */}
-            <div className="space-y-4">
-              <h4 className="text-white font-semibold text-sm uppercase tracking-wider opacity-50">
-                Tech Stack
-              </h4>
-              <div className="flex flex-wrap gap-2">
-                {["React", "Next.js", "Framer Motion", "Tailwind CSS"].map(
-                  (tech) => (
-                    <span
-                      key={tech}
-                      className="px-3 py-1 bg-white/5 border border-white/10 rounded-md text-sm text-white/80"
-                    >
-                      {tech}
-                    </span>
-                  ),
-                )}
-              </div>
-            </div>
-
-            {/* Call to action */}
-            <div className="mt-10">
-              <button
-                className="px-6 py-3 rounded-lg font-medium transition-colors hover:opacity-90"
-                style={{ backgroundColor: "#ffffff80", color: "#000" }}
+            <div className="w-[100%] pr-[20%]">
+              <span
+                className={`text-[11px] font-bold uppercase tracking-widest px-4 py-2 rounded-full w-fit mb-8 inline-block border ${isDark ? "border-white/10" : "border-black/10"}`}
+                style={{
+                  background: `${themeColors.primary.DEFAULT}1A`,
+                  color: isDark
+                    ? themeColors.primary.DEFAULT
+                    : themeColors.primary[800],
+                }}
               >
-                View Project
-              </button>
+                {tag}
+              </span>
+              <h3
+                className={`font-bold text-5xl mb-6 leading-tight tracking-tighter ${isDark ? "text-white" : "text-gray-900"}`}
+              >
+                {title}
+              </h3>
+              <p
+                className={`text-lg mb-10 leading-relaxed font-light ${isDark ? "text-gray-400" : "text-gray-600"}`}
+              >
+                {description}
+              </p>
+
+              {/* Mock Tech Stack */}
+              <div className="space-y-4">
+                <h4
+                  className={`font-semibold text-xs uppercase tracking-[0.2em] ${isDark ? "text-gray-500" : "text-gray-400"}`}
+                >
+                  Tech Stack
+                </h4>
+                <div className="flex flex-wrap gap-2">
+                  {["React", "Next.js", "Framer Motion", "Tailwind CSS"].map(
+                    (tech) => (
+                      <span
+                        key={tech}
+                        className={`px-4 py-2 transition-colors border rounded-lg text-sm font-medium ${isDark ? "bg-white/5 hover:bg-white/10 border-white/5 text-gray-300" : "bg-black/5 hover:bg-black/10 border-black/5 text-gray-700"}`}
+                      >
+                        {tech}
+                      </span>
+                    ),
+                  )}
+                </div>
+              </div>
+
+              {/* Call to action */}
+              <div className="mt-12">
+                <button
+                  className={`px-8 py-4 rounded-xl font-bold  transition-all hover:scale-105 active:scale-95 ${isDark ? "shadow-[0_0_20px_rgba(187,255,0,0.2)] hover:shadow-[0_0_30px_rgba(187,255,0,0.4)]" : "shadow-lg hover:shadow-xl"}`}
+                  style={{
+                    backgroundColor: themeColors.primary.DEFAULT,
+                    color: isDark
+                      ? themeColors.background.DEFAULT
+                      : themeColors.text.DEFAULT,
+                  }}
+                >
+                  View Project
+                </button>
+              </div>
             </div>
           </motion.div>
         )}

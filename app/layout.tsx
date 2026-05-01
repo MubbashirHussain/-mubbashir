@@ -28,7 +28,7 @@ export default function RootLayout({
       >
         <ThemeProvider attribute="class" enableSystem disableTransitionOnChange>
           <CursorProvider>
-            {/* <ArrowCursor /> */}
+            <ArrowCursor />
             <SmoothScroll>
               <ClientWrapper>{children}</ClientWrapper>
             </SmoothScroll>

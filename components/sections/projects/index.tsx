@@ -223,7 +223,7 @@ function HorizontalScroller({
       <motion.div
         ref={trackRef}
         style={{ x }}
-        className="flex gap-6 items-center -rotate-3"
+        className="flex gap-6 items-center -rotate-8"
       >
         {projects.map((project, index) => (
           <CardItem
@@ -271,12 +271,13 @@ function CardItem({
 
   const animatedRotate = useTransform(
     x,
-    [center - 2 * stride, center, center + 2 * stride],
-    [5, 10, 5],
+    [center - 7 * stride, center, center + 7 * stride],
+    [-90, 10, 70],
   );
 
   return (
     <motion.div
+      className="border-"
       ref={cardRef}
       style={{
         width: CARD_W,

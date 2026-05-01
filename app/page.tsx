@@ -38,10 +38,11 @@ export default function Home() {
       // Scroll Trigger animation
       ScrollTrigger.create({
         trigger: hero,
-        start: "95% top", // When 80% of hero is at top of viewport
+        start: "95% top", // When 95% of hero is at top of viewport
         onEnter: () => {
           gsap.to(header, {
             left: "80%",
+            x: 0, // Clear the parsed CSS matrix translation
             xPercent: -90,
             duration: 0.5,
             ease: "power3.out",
@@ -49,11 +50,22 @@ export default function Home() {
         },
         onLeaveBack: () => {
           gsap.to(header, {
-            left: "50%", // Reset to original center position (SideTab default is left="50%")
-            xPercent: -50, // Reset to original center transform (SideTab default is -translate-x-1/2 which is -50%)
+            left: "50%", // Reset to original center position
+            x: 0, // Clear the parsed CSS matrix translation
+            xPercent: -50, // Reset to original center transform
             duration: 0.5,
             ease: "power3.out",
           });
+        },
+        onRefresh: (self) => {
+          // Handle initial state on reload
+          if (self.isActive) {
+            gsap.set(header, {
+              left: "80%",
+              x: 0,
+              xPercent: -90,
+            });
+          }
         },
       });
     }, mainRef);
