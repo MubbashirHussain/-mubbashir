@@ -203,7 +203,7 @@ export function ArrowCursor({
       updateVelocity(currentPos);
 
       const speed = Math.sqrt(
-        Math.pow(velocity.current.x, 2) + Math.pow(velocity.current.y, 2)
+        Math.pow(velocity.current.x, 2) + Math.pow(velocity.current.y, 2),
       );
 
       cursorX.set(currentPos.x);
@@ -285,7 +285,7 @@ export function ArrowCursor({
         translateY: "-50%",
         rotate: cursorType === "default" ? rotation : 0, // Only rotate default
         scale: scale,
-        zIndex: 100,
+        zIndex: 9999,
         pointerEvents: "none",
         willChange: "transform",
       }}

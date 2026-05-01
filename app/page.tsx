@@ -62,7 +62,9 @@ export default function Home() {
   }, []);
   return (
     <main className="max-w-screen" ref={mainRef}>
-      <Terminal />
+      <div className="absolute bottom-0 w-full bg-transparent z-[100]">
+        <Terminal />
+      </div>
       {/* Header */}
 
       <Header

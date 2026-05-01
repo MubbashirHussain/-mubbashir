@@ -49,7 +49,7 @@ export default function Terminal() {
     palette,
     currentThemeName,
     isVisible,
-    setIsVisible
+    setIsVisible,
   );
 
   // Run boot sequence when visible
@@ -66,7 +66,7 @@ export default function Terminal() {
     setIsTerminalOpen,
     isResizing,
     setIsResizing,
-    setTerminalHeight
+    setTerminalHeight,
   );
 
   // Dynamic terminal height calculation

@@ -1,72 +1,123 @@
-import { useRef, useState, useEffect } from "react";
+"use client";
+
+import { useRef, useState, useEffect, useCallback } from "react";
 import { createPortal } from "react-dom";
 import {
   useScroll,
   useTransform,
   motion,
   useSpring,
-  MotionValue,
   AnimatePresence,
+  MotionValue,
 } from "framer-motion";
 import SectionHeading from "@/components/ui/sectionHeading";
-import ProjectCard from "./cards";
-import Image from "next/image";
+import { ProjectCard } from "./cards";
 import { Container } from "@/components/ui/container";
 
+// ─── Data ───────────────────────────────────────────────────────────
 const projects = [
   {
     title: "Oceanic Odyssey",
+    tag: "Web Experience",
     description:
       "An interactive web experience showcasing marine biodiversity and conservation efforts, featuring stunning visuals from deep-sea explorations.",
     image: "",
   },
   {
     title: "EcoConnect",
+    tag: "Social Platform",
     description:
       "A social platform connecting environmental enthusiasts with local green initiatives and volunteer opportunities.",
-    image: "/images/project-ecoconnect.png",
+    image: "",
   },
   {
-    title: "QuantumFlow Analytics",
+    title: "QuantumFlow",
+    tag: "Analytics",
     description:
       "An advanced data visualization tool leveraging quantum-inspired algorithms for predictive market analysis.",
-    image: "/images/project-quantumflow.png",
+    image: "",
   },
   {
     title: "Aetheria VR",
+    tag: "Virtual Reality",
     description:
       "An immersive virtual reality experience that transports users to fantastical, procedurally generated worlds.",
-    image: "/images/project-aetheria.png",
+    image: "",
   },
   {
     title: "Synapse AI",
+    tag: "Education",
     description:
       "A personalized learning assistant powered by AI, adapting educational content to individual student needs and progress.",
-    image: "/images/project-synapse.png",
+    image: "",
   },
   {
-    title: "TerraHarvest Robotics",
+    title: "TerraHarvest",
+    tag: "Robotics",
     description:
       "Automated farming robots designed to optimize crop yield and reduce resource consumption in modern agriculture.",
-    image: "/images/project-terraharvest.png",
+    image: "",
   },
 ];
 
-const CARD_WIDTH = 320;
-const GAP = 32; // gap-8 = 32px
+const CARD_W = 300;
+const CARD_H = 380;
+const GAP = 24;
 
+// ─── Main Section ───────────────────────────────────────────────────
 export default function ProjectsSection() {
-  const containerRef = useRef<HTMLDivElement>(null);
+  const sectionRef = useRef<HTMLDivElement>(null);
   const [activeIndex, setActiveIndex] = useState<number | null>(null);
+  const [hiddenIndex, setHiddenIndex] = useState<number | null>(null);
+  const [isClosing, setIsClosing] = useState(false);
+  const [originRect, setOriginRect] = useState<DOMRect | null>(null);
+  const [mounted, setMounted] = useState(false);
+
   const { scrollYProgress } = useScroll({
-    target: containerRef,
+    target: sectionRef,
     offset: ["start start", "end end"],
   });
 
+  useEffect(() => {
+    setMounted(true);
+  }, []);
+
+  // Lock body scroll while card is open
+  useEffect(() => {
+    document.body.style.overflow = activeIndex !== null ? "hidden" : "";
+    return () => {
+      document.body.style.overflow = "";
+    };
+  }, [activeIndex]);
+
+  const handleExpand = useCallback(
+    (index: number, rect: DOMRect, rotation: number) => {
+      setOriginRect(rect);
+      setActiveIndex(index);
+      setHiddenIndex(index);
+      setIsClosing(false);
+      // Store the initial rotation so the expanded card can animate from it
+      (window as any)._expandRotation = rotation;
+    },
+    [],
+  );
+
+  const handleClose = useCallback(() => {
+    // 1) Animate content out first
+    setIsClosing(true);
+    // 2) After content exits (~1000ms), shrink the card box
+    setTimeout(() => {
+      setActiveIndex(null);
+      setIsClosing(false);
+    }, 1000);
+  }, []);
+
   return (
-    <section ref={containerRef} className="h-[200vh] relative z-20">
-      <div className="project_bg sticky top-0 h-screen overflow-hidden">
-        <div className="absolute top-10 left-0 w-full z-10">
+    <section ref={sectionRef} className="h-[500vh] relative z-20">
+      {/* Sticky viewport */}
+      <div className="sticky top-0 h-screen overflow-hidden project_bg">
+        {/* Heading */}
+        <div className="absolute top-10 left-0 w-full z-10 pointer-events-none">
           <Container className="px-6 md:px-10 lg:px-20">
             <SectionHeading
               title="Projects"
@@ -75,140 +126,171 @@ export default function ProjectsSection() {
             />
           </Container>
         </div>
-        <div className="w-full flex items-center justify-center h-full">
-          <HorizontalCards
-            scrollYProgress={scrollYProgress}
-            activeIndex={activeIndex}
-            setActiveIndex={setActiveIndex}
-          />
-        </div>
+
+        {/* Horizontal scroller */}
+        <HorizontalScroller
+          scrollYProgress={scrollYProgress}
+          activeIndex={activeIndex}
+          hiddenIndex={hiddenIndex}
+          onExpand={handleExpand}
+        />
       </div>
-      <style>
-        {`
-          .project_bg {
-            background-image: url('/images/project-bg.png');
-            background-size: cover;
-            background-position: center;
-          }
-        `}
-      </style>
+
+      {/* ── Expanded-card portal ─────────────────────────── */}
+      {mounted &&
+        createPortal(
+          <AnimatePresence onExitComplete={() => setHiddenIndex(null)}>
+            {activeIndex !== null && originRect && (
+              <>
+                {/* Backdrop */}
+                <motion.div
+                  key="backdrop"
+                  className="fixed inset-0 z-[200] backdrop-blur-md bg-black/55 cursor-pointer"
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  exit={{ opacity: 0 }}
+                  transition={{ duration: 0.22 }}
+                  onClick={handleClose}
+                />
+                {/* Expanded card */}
+                <ProjectCard
+                  key={`card-expanded-${activeIndex}`}
+                  {...projects[activeIndex]}
+                  index={activeIndex}
+                  isExpanded={true}
+                  isClosing={isClosing}
+                  originRect={originRect}
+                  onClose={() => {
+                    setHiddenIndex(activeIndex);
+                  }}
+                  onClick={handleClose}
+                />
+              </>
+            )}
+          </AnimatePresence>,
+          document.body,
+        )}
+
+      <style>{`
+        .project_bg {
+          background-image: url('/images/project-bg.png');
+          background-size: cover;
+          background-position: center;
+        }
+      `}</style>
     </section>
   );
 }
 
-function HorizontalCards({
+// ─── Horizontal Scroller ────────────────────────────────────────────
+function HorizontalScroller({
   scrollYProgress,
   activeIndex,
-  setActiveIndex,
+  hiddenIndex,
+  onExpand,
 }: {
-  scrollYProgress: MotionValue<number>;
+  scrollYProgress: ReturnType<typeof useScroll>["scrollYProgress"];
   activeIndex: number | null;
-  setActiveIndex: (index: number | null) => void;
+  hiddenIndex: number | null;
+  onExpand: (index: number, rect: DOMRect, rotation: number) => void;
 }) {
-  const stride = CARD_WIDTH + GAP;
-  const totalWidth = (projects.length - 1) * stride;
+  const stride = CARD_W + GAP;
+  const totalCards = projects.length;
 
-  const smoothProgress = useSpring(scrollYProgress, {
-    stiffness: 100,
-    damping: 30,
+  // Smooth spring on scroll
+  const smooth = useSpring(scrollYProgress, {
+    stiffness: 80,
+    damping: 25,
     restDelta: 0.001,
   });
 
-  const x = useTransform(smoothProgress, [0, 1], [0, totalWidth]);
+  // x: start = half-screen inset (first card at center-right), end = all cards revealed
+  // We'll compute these on the client via a ref
+  const trackRef = useRef<HTMLDivElement>(null);
+
+  // Start: first card starts at 50vw. As we scroll, move left by totalWidth.
+  // useTransform drives translateX of the track.
+  const totalScrollWidth = (totalCards - 1) * stride;
+
+  const x = useTransform(smooth, [1, 0], [0, -totalScrollWidth]);
 
   return (
-    <motion.div
-      style={{ x, marginRight: -CARD_WIDTH / 2 }}
-      className="flex flex-row-reverse gap-8 absolute right-1/2 -rotate-10 top-1/2"
+    // Outer container: positioned to start the first card at 50vw
+    <div
+      className="absolute inset-0 flex items-center"
+      style={{ paddingLeft: "50vw" }}
     >
-      {projects.map((project, index) => (
-        <CardWrapper
-          key={index}
-          index={index}
-          x={x}
-          project={project}
-          isActive={activeIndex === index}
-          onExpand={() => setActiveIndex(index === activeIndex ? null : index)}
-          onClose={() => setActiveIndex(null)}
-          activeIndex={activeIndex}
-        />
-      ))}
-    </motion.div>
+      <motion.div
+        ref={trackRef}
+        style={{ x }}
+        className="flex gap-6 items-center -rotate-3"
+      >
+        {projects.map((project, index) => (
+          <CardItem
+            key={index}
+            index={index}
+            project={project}
+            isHidden={hiddenIndex === index}
+            onExpand={onExpand}
+            x={x}
+          />
+        ))}
+      </motion.div>
+    </div>
   );
 }
 
-function CardWrapper({
+function CardItem({
   index,
-  x,
   project,
-  isActive,
+  isHidden,
   onExpand,
-  onClose,
-  activeIndex,
+  x,
 }: {
   index: number;
-  x: MotionValue<number>;
   project: (typeof projects)[0];
-  isActive: boolean;
-  onExpand: () => void;
-  onClose: () => void;
-  activeIndex: number | null;
+  isHidden: boolean;
+  onExpand: (index: number, rect: DOMRect, rotation: number) => void;
+  x: MotionValue<number>;
 }) {
-  const stride = CARD_WIDTH + GAP;
-  const position = index * stride;
-  const center = position;
+  const cardRef = useRef<HTMLDivElement>(null);
 
-  const animatedScale = useTransform(
-    x,
-    [
-      center - 2 * stride,
-      center - stride,
-      center,
-      center + stride,
-      center + 2 * stride,
-    ],
-    [1, 1.2, 1.4, 1.2, 1]
-  );
-  const scale = isActive ? 1 : animatedScale;
+  const handleClick = () => {
+    if (cardRef.current) {
+      onExpand(
+        index,
+        cardRef.current.getBoundingClientRect(),
+        animatedRotate.get(),
+      );
+    }
+  };
 
-  const opacity = useTransform(
-    x,
-    [center - 2 * stride, center, center + 2 * stride],
-    [1, 1, 1]
-  );
-
-  const animatedZIndex = useTransform(
-    x,
-    [center - 2 * stride, center, center + 2 * stride],
-    [1, 5, 1]
-  );
-  const zIndex = isActive ? 100 : animatedZIndex;
+  const stride = CARD_W + GAP;
+  // Because x maps from 0 to -totalScrollWidth, the center for a given card is -index * stride
+  const center = -index * stride;
 
   const animatedRotate = useTransform(
     x,
     [center - 2 * stride, center, center + 2 * stride],
-    [5, 10, 5]
+    [5, 10, 5],
   );
-  const rotate = isActive ? 0 : animatedRotate;
-
-  const [mounted, setMounted] = useState(false);
-  useEffect(() => {
-    setMounted(true);
-  }, []);
 
   return (
     <motion.div
-      style={{ scale, zIndex, opacity, rotate }}
-      className={`relative shrink-0 w-[320px] h-[300px] ${
-        isActive ? "z-50" : ""
-      }`} // Explicit size to maintain flow
+      ref={cardRef}
+      style={{
+        width: CARD_W,
+        height: CARD_H,
+        flexShrink: 0,
+      }}
     >
       <ProjectCard
         {...project}
-        layoutId={`project-${index}`}
-        onClick={onExpand}
         index={index}
-        activeIndex={activeIndex}
+        isExpanded={false}
+        isHidden={isHidden}
+        onClick={handleClick}
+        rotate={animatedRotate}
       />
     </motion.div>
   );
