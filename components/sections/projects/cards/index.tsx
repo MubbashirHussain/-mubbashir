@@ -90,10 +90,10 @@ export function ProjectCard({
         borderRadius: 28,
         rotate: 0,
         transition: {
-          rotate: { duration: 0.3, ease: "easeOut" },
-          width: { duration: 1, ease: "easeInOut", delay: 1 },
+          rotate: { duration: 0.3, ease: "easeOut" as const },
+          width: { duration: 1, ease: "easeInOut" as const, delay: 1 },
           default: {
-            type: "spring",
+            type: "spring" as const,
             stiffness: 300,
             damping: 30,
             delay: 0.3,
@@ -112,12 +112,12 @@ export function ProjectCard({
         rotate: initRotate,
         transition: {
           default: {
-            type: "spring",
+            type: "spring" as const,
             stiffness: 300,
             damping: 30,
             delay: 0,
           },
-          rotate: { duration: 0.3, ease: "easeIn", delay: 0.4 },
+          rotate: { duration: 0.3, ease: "easeIn" as const, delay: 0.4 },
         },
       }
     : {};
@@ -184,13 +184,13 @@ export function ProjectCard({
           left: isExpandedAnim && !isClosing ? "40%" : "0%",
           transition: {
             width: {
-              type: "spring",
+              type: "spring" as const,
               duration: 1,
               delay: isClosing ? 0 : 1,
             },
             left: {
-              type: "spring",
-              ease: "easeInOut",
+              type: "spring" as const,
+              ease: "easeInOut" as const,
               duration: 1,
               delay: isClosing ? 0 : 1,
             },
