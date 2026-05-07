@@ -2,6 +2,8 @@ import React from "react";
 import { SideTab } from "@/components/ui/side-tab";
 import { getColorStyle } from "@/lib/color-utils";
 import { FloatingIcon } from "../ui/profile-image";
+import { ThemeToggle } from "../ui/theme-toggle";
+import { useTheme } from "next-themes";
 
 export interface NavLink {
   /** Display text for the link */
@@ -99,15 +101,18 @@ export const Header = React.forwardRef(
       style,
       navGap = "gap-8",
     }: HeaderProps,
-    ref
+    ref,
   ) => {
     const textColorStyle = textColor ? getColorStyle(textColor, "text") : {};
     const bgStyle = backgroundColor
       ? getColorStyle(backgroundColor, "bg-secondary")
       : {};
 
+    const { theme } = useTheme();
+
     return (
       <SideTab
+        key={theme}
         ref={ref as any}
         top="0"
         left="50%"
@@ -117,9 +122,9 @@ export const Header = React.forwardRef(
         bgClassName={bgClassName}
         eachCorner={{
           br: { enabled: false },
-          tr: { enabled: true, backgroundColor: "bg-secondary" },
+          tr: { enabled: true, backgroundColor: bgClassName || "bg-secondary" },
           bl: { enabled: false },
-          tl: { enabled: true, backgroundColor: "bg-secondary" },
+          tl: { enabled: true, backgroundColor: bgClassName || "bg-secondary" },
         }}
         radius={radius}
         side="top"
@@ -149,7 +154,7 @@ export const Header = React.forwardRef(
         </nav>
       </SideTab>
     );
-  }
+  },
 );
 
 Header.displayName = "Header";

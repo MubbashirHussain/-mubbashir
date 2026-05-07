@@ -59,7 +59,7 @@ export const ImageGallery = React.forwardRef(
       className = "",
       imageBoxClassName = "w-[30%] aspect-square bg-background-secondary rounded-3xl h-fit",
     }: ImageGalleryProps,
-    ref
+    ref,
   ) => {
     const bgStyle = backgroundColor ? getColorStyle(backgroundColor, "bg") : {};
 
@@ -74,17 +74,20 @@ export const ImageGallery = React.forwardRef(
     return (
       <div
         ref={ref as any}
-        className={`flex flex-wrap ${gap} absolute z-10 ${padding} ${
+        className={`flex flex-wrap ${gap} absolute z-10 bg-primary dark:bg-background ${padding} ${
           bgClassName || bgStyle.className || ""
         } ${className}`}
         style={positionStyles}
       >
         {Array.from({ length: imageCount }).map((_, index) => (
-          <div key={index} className={`image-box ${imageBoxClassName}`} />
+          <div
+            key={index}
+            className={`image-box bg-background dark:bg-[#242424] ${imageBoxClassName}`}
+          />
         ))}
       </div>
     );
-  }
+  },
 );
 
 ImageGallery.displayName = "ImageGallery";

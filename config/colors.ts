@@ -69,29 +69,29 @@ export const colors = {
   // Dark mode colors
   dark: {
     text: {
-      DEFAULT: '#f9fafb',      // Main text color (light)
-      secondary: '#d1d5db',    // Secondary text (gray-300)
-      muted: '#9ca3af',        // Muted text (gray-400)
-      inverse: '#1f1f1f',      // Text on light backgrounds
+      DEFAULT: '#e2e8f0',      // Softer white (slate-200)
+      secondary: '#94a3b8',    // Muted slate
+      muted: '#64748b',        // Deeper muted
+      inverse: '#0f172a',      // Dark on light
     },
     background: {
-      DEFAULT: '#0f0f0f',      // Main background (very dark)
-      secondary: '#1a1a1a',    // Secondary background
-      tertiary: '#262626',     // Tertiary background
-      inverse: '#ffffff',      // Light background
+      DEFAULT: '#1a1a1a',      // Main dark background
+      secondary: '#0f172a',    // Secondary dark
+      tertiary: '#2a2a2a',     // Tertiary dark
+      inverse: '#f8fafc',      // Light on dark
     },
     primary: {
-      50: '#2e4700',           // Darkest lime (inverted for dark mode)
-      100: '#527a00',          // Very dark lime
-      200: '#7ab300',          // Dark lime
-      300: '#a3e600',          // Darker lime
-      400: '#bbff33',          // Medium lime
-      500: '#bbff00',          // Main lime (brand color - same)
-      600: '#cbff66',          // Medium-light lime
-      700: '#deff99',          // Light lime
-      800: '#ecffcc',          // Very light lime
-      900: '#f7ffe6',          // Lightest lime
-      DEFAULT: '#bbff00',      // Default primary
+      50: '#2e4700',
+      100: '#527a00',
+      200: '#7ab300',
+      300: '#a3e600',
+      400: '#bbff33',
+      500: '#a3e600',
+      600: '#82b800',
+      700: '#deff99',
+      800: '#ecffcc',
+      900: '#f7ffe6',
+      DEFAULT: '#a3e600',      // Refined lime
     },
     secondary: {
       50: '#1f1f1f',           // Darkest gray (inverted)
@@ -104,7 +104,7 @@ export const colors = {
       700: '#cccccc',          // Light gray
       800: '#e5e5e5',          // Very light gray
       900: '#f5f5f5',          // Lightest gray
-      DEFAULT: '#f9fafb',      // Default secondary (light for dark mode)
+      DEFAULT: '#3e3e3e',      // Default secondary (matches header in dark mode)
     },
     accent: {
       50: '#1e3a8a',           // Darkest blue (inverted)

@@ -90,8 +90,11 @@ export default function Home() {
         // We'll control horizontal position via GSAP
         style={{ position: "fixed" }} // Ensure it's fixed as per SideTab default, but we might need to override if SideTab sets it. SideTab sets fixed.
       />
-      <div className="bg-primary sticky top-0 z-30" ref={heroRef}>
-        <Container className="h-screen bg-background relative max-h-[1020px]">
+      <div
+        className="bg-primary sticky top-0 z-30 dark:bg-background"
+        ref={heroRef}
+      >
+        <Container className="h-screen bg-background dark:bg-primary relative max-h-[1020px] px-0 md:px-0">
           <HeroSection />
         </Container>
       </div>

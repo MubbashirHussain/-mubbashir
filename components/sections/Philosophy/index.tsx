@@ -1,4 +1,6 @@
 import React, { useEffect, useState, useRef } from "react";
+import { useTheme } from "next-themes";
+
 import { useScroll, useTransform, useSpring, motion } from "framer-motion";
 import SidebarNav, { NavItem } from "./SideBar";
 import ContentSection, { SectionData } from "./ContentSection";
@@ -47,6 +49,8 @@ const navItems: NavItem[] = sections.map((s) => ({
 const PhilosophySection: React.FC = () => {
   const [activeId, setActiveId] = useState<string>(sections[0].id);
   const containerRef = useRef<HTMLDivElement>(null);
+  const { theme } = useTheme();
+
 
   // Framer Motion Scroll Hooks
   const { scrollYProgress } = useScroll({
@@ -108,6 +112,8 @@ const PhilosophySection: React.FC = () => {
       className="relative flex flex-col w-full group/design-root h-[200vh] bg-background z-30"
     >
       <SideTab
+        key={theme}
+
         // top=""
         // ref={scrollTabRef}
         top="-60px"
@@ -127,7 +133,7 @@ const PhilosophySection: React.FC = () => {
         width={"20%"}
         cornerSize={30}
       >
-        <span className="text-secondary animate-bounce flex gap-3 justify-center items-center">
+        <span className="text-text-secondary animate-bounce flex gap-3 justify-center items-center">
           Scroll <ArrowDown size={20} />
         </span>
       </SideTab>
@@ -155,7 +161,7 @@ const PhilosophySection: React.FC = () => {
               <p className="text-sm font-bold text-text-muted uppercase mb-4">
                 Jump to section:
               </p>
-              <div className="flex flex-wrap gap-2 border border-black/10 rounded-lg p-2">
+              <div className="flex flex-wrap gap-2 border border-black/10 dark:border-white/10 rounded-lg p-2">
                 {navItems.map((item, index) => (
                   <div key={item.id} className="flex items-center gap-2">
                     <a
@@ -163,14 +169,14 @@ const PhilosophySection: React.FC = () => {
                       onClick={(e) => handleNavClick(e, item.id)}
                       className={`px-3 py-1 text-sm font-medium transition-colors ${
                         activeId === item.id
-                          ? "bg-primary-100 border-primary-300 text-text-main"
-                          : "bg-transparent border-black/10 text-text-muted hover:border-black/30"
+                          ? "bg-primary-100 border-primary-300 text-text"
+                          : "bg-transparent border-black/10 dark:border-white/10 text-text-muted hover:border-black/30 dark:hover:border-white/30"
                       }`}
                     >
                       {item.label}
                     </a>
                     {index < navItems.length - 1 && (
-                      <span className="w-px h-4 bg-black/10" />
+                      <span className="w-px h-4 bg-black/10 dark:bg-white/10" />
                     )}
                   </div>
                 ))}
@@ -188,7 +194,7 @@ const PhilosophySection: React.FC = () => {
                   <div className="flex flex-col md:pl-16 pt-3">
                     <div
                       aria-hidden="true"
-                      className="absolute line mt-9 left-0 md:left-6 top-0 bottom-0 w-px bg-black/10 hidden md:block z-0"
+                      className="absolute line mt-9 left-0 md:left-6 top-0 bottom-0 w-px bg-black/10 dark:bg-white/10 hidden md:block z-0"
                     />
                     {sections.map((section) => (
                       <ContentSection

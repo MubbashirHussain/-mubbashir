@@ -16,6 +16,9 @@ import {
   Linkedin,
 } from "lucide-react";
 import { tailwindToHex } from "@/lib/color-utils";
+import { useTheme } from "next-themes";
+import { useTailwindHex } from "@/hooks/use-tailwind-hex";
+
 import { HeroLeftSection } from "./leftSection";
 import gsap from "gsap";
 
@@ -23,6 +26,7 @@ export default function HeroSection() {
   const parentRef = useRef<HTMLDivElement>(null);
   const containerRef = useRef<HTMLDivElement>(null);
   const toPxContainer = useElementUnits(containerRef);
+  const { theme } = useTheme();
 
   // Animation Refs
   const headerRef = useRef<HTMLDivElement>(null);
@@ -70,7 +74,7 @@ export default function HeroSection() {
             x: -200,
             duration: 1,
           },
-          "-=0.8"
+          "-=0.8",
         )
         .from(
           scrollTabRef.current,
@@ -79,7 +83,7 @@ export default function HeroSection() {
             opacity: 0,
             duration: 0.8,
           },
-          "-=.8"
+          "-=.8",
         )
 
         // Right side animations
@@ -91,7 +95,7 @@ export default function HeroSection() {
             duration: 1,
             ease: "back.out(1)",
           },
-          "-=1"
+          "-=1",
         )
         .from(
           shapeRef.current,
@@ -100,7 +104,7 @@ export default function HeroSection() {
             duration: 0.8,
             // transformOrigin: "center center",
           },
-          "-=0.8"
+          "-=0.8",
         )
         .from(
           profileRef.current,
@@ -109,7 +113,7 @@ export default function HeroSection() {
             opacity: 0,
             duration: 1,
           },
-          "-=0.6"
+          "-=0.6",
         );
     }, containerRef); // Scope to containerRef
 
@@ -125,24 +129,34 @@ export default function HeroSection() {
     { label: "Contact", href: "#contact", rel: "noopener noreferrer" },
   ];
 
+  const secondaryColor = useTailwindHex(
+    theme === "dark" ? "bg-secondary-100" : "bg-secondary",
+  );
+  const accentColor = useTailwindHex(
+    theme === "dark" ? "bg-accent-200" : "bg-accent-600",
+  );
+
   // Floating icons configuration
   const floatingIcons: FloatingIcon[] = [
     {
       icon: Github,
-      backgroundColor: tailwindToHex("bg-secondary"),
+      backgroundColor: secondaryColor,
       position: "-right-8 top-20",
       size: 24,
     },
     {
       icon: Linkedin,
-      backgroundColor: tailwindToHex("bg-accent-600"),
+      backgroundColor: accentColor,
       position: "-left-6 bottom-32",
       size: 24,
     },
   ];
 
   return (
-    <div className="grid grid-cols-12 gap-5 h-full" ref={containerRef}>
+    <div
+      className="grid grid-cols-12 gap-5 h-full bg-background dark:bg-[#242424] px-4 md:px-8"
+      ref={containerRef}
+    >
       {/* Left Column - Hero Content */}
       <div
         ref={parentRef}
@@ -159,11 +173,13 @@ export default function HeroSection() {
         </div>
       </div>
 
-      {/* Decorative Side Tab */}
+      {/* Decorative Side Tab | left corner before 3 images */}
       <SideTab
+        key={`hero-tab-1-${theme}`}
         bottom="29%"
         left="0%"
-        bgClassName="bg-primary"
+        bgClassName={`${theme === "dark" ? "bg-background" : "bg-primary"}`}
+        className="bg-primary dark:bg-background"
         eachCorner={{
           br: { enabled: false },
           tr: { enabled: false },
@@ -221,7 +237,7 @@ export default function HeroSection() {
         {/* Background Shape */}
         <div
           ref={shapeRef}
-          className={`h-[80%] w-[43%] right-0 bg-primary absolute top-[10%]`}
+          className={`h-[80%] w-[43%] right-0 bg-primary dark:bg-background absolute top-[10%]`}
           style={{
             borderRadius: toPxContainer("5%"),
           }}
@@ -229,13 +245,16 @@ export default function HeroSection() {
 
         {/* Decorative Side Tabs */}
         <div
+          key={`hero-tab-29-${theme}`}
           ref={rightSideTab1Ref}
           className="absolute inset-0 pointer-events-none"
         >
           <SideTab
+            key={`hero-tab-2-${theme}`}
             top="10%"
             right="0%"
-            bgClassName="bg-primary"
+            bgClassName={`${theme === "dark" ? "bg-background" : "bg-primary"}`}
+            className="bg-primary dark:bg-background"
             eachCorner={{
               br: { enabled: true },
               tr: { enabled: false },
@@ -251,9 +270,11 @@ export default function HeroSection() {
           className="absolute inset-0 pointer-events-none"
         >
           <SideTab
+            key={`hero-tab-3-${theme}`}
             bottom="10%"
             right="0%"
-            bgClassName="bg-primary"
+            bgClassName={`${theme === "dark" ? "bg-background" : "bg-primary"}`}
+            className="bg-primary dark:bg-background"
             eachCorner={{
               br: { enabled: false },
               tr: { enabled: true },
@@ -270,7 +291,7 @@ export default function HeroSection() {
           <ProfileImage
             imageSrc="/images/hero-person.png"
             imageAlt="Mubbashir Portrait"
-            frameBgClassName="bg-primary"
+            frameBgClassName="bg-primary dark:bg-[#242424] dark:hover:bg-primary/90 "
             grayscale={true}
             floatingIcons={floatingIcons}
           />

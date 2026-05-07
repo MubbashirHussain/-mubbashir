@@ -76,7 +76,7 @@ const ExperienceItem = ({ exp }: { exp: (typeof experiences)[0] }) => {
       <div className="flex flex-col gap-2">
         <div className="flex items-center gap-2 jusZ">
           <h3
-            className="text-3xl md:text-4xl lg:text-5xl font-bold font-space-grotesk text-text-main group-hover:text-secondary-50 transition-colors duration-500 ease-in-out
+            className="text-3xl md:text-4xl lg:text-5xl font-bold font-space-grotesk text-text group-hover:text-secondary-50 dark:group-hover:text-secondary-100 transition-colors duration-500 ease-in-out
               group-hover:text-shadow-[1px_1px_0_theme('colors.black'),_-1px_-1px_0_theme('colors.black'),_1px_-1px_0_theme('colors.black'),_-1px_1px_0_theme('colors.black')]"
           >
             {exp.role}
@@ -95,7 +95,7 @@ const ExperienceItem = ({ exp }: { exp: (typeof experiences)[0] }) => {
                             rounded-l-2xl h-full w-[10%] flex items-center justify-center border border-secondary-500
                            group-hover:text-primary group-hover:opacity-100 uppercase"
                 >
-                  <h4 className="text-md font-bold text-text-main rotate-90 origin-left-center whitespace-nowrap">
+                  <h4 className="text-md font-bold text-text rotate-90 origin-left-center whitespace-nowrap">
                     {exp.company}
                   </h4>
                 </div>
@@ -129,7 +129,7 @@ const ExperienceItem = ({ exp }: { exp: (typeof experiences)[0] }) => {
         </div>
         <p className="text-lg md:text-xl text-text-muted">{exp.company}</p>
       </div>
-      <div className="text-3xl md:text-4xl lg:text-5xl font-medium text-text-muted/50 group-hover:text-text-main transition-colors font-space-grotesk duration-800 ease-in-out group-hover:text-background">
+      <div className="text-3xl md:text-4xl lg:text-5xl font-medium text-text-muted/50 group-hover:text-text transition-colors font-space-grotesk duration-800 ease-in-out group-hover:text-background dark:group-hover:text-secondary-100">
         {exp.period}
       </div>
     </div>

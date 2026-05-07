@@ -23,7 +23,7 @@ type ColorShade = 50 | 100 | 200 | 300 | 400 | 500 | 600 | 700 | 800 | 900;
 export function getColorClass(
   color: ColorName | string,
   shade?: ColorShade | ColorVariant,
-  prefix?: string
+  prefix?: string,
 ): string {
   // If it's a hex color, return as is
   if (color.startsWith("#")) {
@@ -72,7 +72,7 @@ export function isTailwindColor(color: string): boolean {
  */
 export function getColorStyle(
   color: string,
-  prefix?: string
+  prefix?: string,
 ): { className?: string; style?: React.CSSProperties } {
   if (!color) {
     return {};
@@ -83,10 +83,10 @@ export function getColorStyle(
       prefix === "bg"
         ? "backgroundColor"
         : prefix === "text"
-        ? "color"
-        : prefix === "border"
-        ? "borderColor"
-        : "color";
+          ? "color"
+          : prefix === "border"
+            ? "borderColor"
+            : "color";
     return { style: { [styleKey]: color } };
   }
 
@@ -170,9 +170,6 @@ export function tailwindToHex(colorClass: string): string {
       "900": "#1f1f1f",
       DEFAULT: "#1f1f1f",
     },
-    "background-inverse": {
-      DEFAULT: "#1f1f1f",
-    },
     accent: {
       "50": "#eff6ff",
       "100": "#dbeafe",
@@ -188,9 +185,15 @@ export function tailwindToHex(colorClass: string): string {
     },
     background: {
       DEFAULT: "#ffffff",
+      secondary: "#f9fafb",
+      tertiary: "#f3f4f6",
+      inverse: "#1f1f1f",
     },
     text: {
       DEFAULT: "#1f1f1f",
+      secondary: "#6b7280",
+      muted: "#9ca3af",
+      inverse: "#ffffff",
     },
   };
 

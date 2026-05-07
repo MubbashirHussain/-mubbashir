@@ -61,29 +61,29 @@
 }
 .dark {
   /* Text colors - Dark mode */
-  --color-text: #f9fafb;
-  --color-text-secondary: #d1d5db;
-  --color-text-muted: #9ca3af;
-  --color-text-inverse: #1f1f1f;
+  --color-text: #e2e8f0;
+  --color-text-secondary: #b6bbc1;
+  --color-text-muted: #a5a8ac;
+  --color-text-inverse: #ffffff;
 
   /* Background colors - Dark mode */
-  --color-background: #0f0f0f;
-  --color-background-secondary: #1a1a1a;
-  --color-background-tertiary: #262626;
-  --color-background-inverse: #ffffff;
+  --color-background: #1a1a1a;
+  --color-background-secondary: #0f172a;
+  --color-background-tertiary: #2a2a2a;
+  --color-background-inverse: #f8fafc;
 
-  /* Primary colors (Lime Green) - Dark mode */
+  /* Primary colors (Refined Lime) - Dark mode */
   --color-primary-50: #2e4700;
   --color-primary-100: #527a00;
   --color-primary-200: #7ab300;
   --color-primary-300: #a3e600;
   --color-primary-400: #bbff33;
-  --color-primary-500: #bbff00;
-  --color-primary-600: #cbff66;
+  --color-primary-500: #a3e600;
+  --color-primary-600: #82b800;
   --color-primary-700: #deff99;
   --color-primary-800: #ecffcc;
   --color-primary-900: #f7ffe6;
-  --color-primary: #bbff00;
+  --color-primary: #a3e600;
 
   /* Secondary colors (Gray) - Dark mode */
   --color-secondary-50: #1f1f1f;
@@ -96,7 +96,7 @@
   --color-secondary-700: #cccccc;
   --color-secondary-800: #e5e5e5;
   --color-secondary-900: #f5f5f5;
-  --color-secondary: #f9fafb;
+  --color-secondary: #3e3e3e;
 
   /* Accent colors (Blue) - Dark mode */
   --color-accent-50: #1e3a8a;
@@ -111,6 +111,8 @@
   --color-accent-900: #eff6ff;
   --color-accent: #60a5fa;
 }
+
+@variant dark (&:where(.dark, .dark *));
 
 @theme {
   --color-text: var(--color-text);

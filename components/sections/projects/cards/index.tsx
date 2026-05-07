@@ -220,7 +220,7 @@ export function ProjectCard({
           >
             {/* gradient for thumbnail overlay */}
             <motion.div
-              className={`absolute inset-0 bg-gradient-to-t ${isDark ? "from-[#0f0f0f] via-[#0f0f0f]/50" : "from-white via-white/80"} to-transparent pointer-events-none`}
+              className={`absolute inset-0 bg-gradient-to-t ${isDark ? "from-[#1a1a1a] via-[#1a1a1a]/50" : "from-white via-white/80"} to-transparent pointer-events-none`}
               initial={{ opacity: 0 }}
               animate={{ opacity: 1, transition: { duration: 0.8 } }}
             />
@@ -278,7 +278,7 @@ export function ProjectCard({
         {isExpanded && !isClosing && (
           <motion.div
             key="expanded"
-            className={`absolute inset-y-0 left-0 w-[40%] p-12 flex flex-col justify-center overflow-hidden bg-gradient-to-r ${isDark ? "from-[#0f0f0f] via-[#0f0f0f]" : "from-white via-white"} to-transparent z-10`}
+            className={`absolute inset-y-0 left-0 w-[40%] p-12 flex flex-col justify-center overflow-hidden bg-gradient-to-r ${isDark ? "from-[#1a1a1a] via-[#1a1a1a]" : "from-white via-white"} to-transparent z-10`}
             initial={{ opacity: 0, x: -40, width: "0%" }}
             animate={{
               opacity: 1,
